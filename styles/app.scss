@@ -1,0 +1,418 @@
+@import '~bootstrap/scss/bootstrap';
+@import './custom.scss';
+@import 'boxicons/css/boxicons.min.css';
+
+// Global Font for app
+// @font-face {
+//   font-family: 'Lato';
+//   src: url('../src/fonts/Lato-Regular.ttf') format('ttf'),
+//     url('../src/fonts/Lato-Thin.ttf') format('ttf');
+//   font-weight: 500;
+//   font-style: normal;
+// }
+
+// Root Variables
+:root {
+  --sidebar-width: 170px;
+  --sidebar-headingColor: #7889a4;
+  --page-header-bgColor-hover: #1d2636;
+  --bg-light: #041118;
+  --sidebar-font-color: #e1e0df;
+}
+
+body {
+  background-color: #ececec;
+  font-size: 0.875rem;
+}
+
+/*---------------------- Main Content Style ------------------------ */
+main {
+  overflow-y: hidden;
+}
+
+/* Global Styles*/
+.no-padding {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.scrollarea {
+  overflow-y: auto;
+}
+
+.ml-5 {
+  margin-left: 10px;
+}
+
+a:hover {
+  color: rgba(13, 110, 253, 1);
+}
+
+/* main wrapper container */
+.container-lg {
+  display: flex;
+  flex-wrap: nowrap;
+  height: 100vh;
+  max-height: 100vh;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0;
+}
+
+/* -------------------Sidebar Panel Styles---------------------- */
+.sidebar {
+  width: 15rem;
+  max-width: 15rem;
+  background-color: #011936;
+}
+
+.sidebar .logo_content .logo {
+  color: #fff;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  font-size: 1rem;
+  display: inline-block;
+  margin-left: 5px;
+}
+
+.sidebar .logo_content {
+  justify-content: space-between;
+  border: 0;
+  border-radius: 0;
+}
+
+.sidebar .logo_content i.btn {
+  padding: 0;
+}
+
+.sidebar i.bx {
+  color: #fff;
+}
+
+/* Scan Directory Button */
+.sidebar .scan_directory {
+  margin: 1.5rem auto;
+}
+
+.sidebar .scan_directory button {
+  width: 100%;
+  border-radius: 0;
+}
+
+.sidebar .scan_directory button span {
+  display: inline-block;
+  margin-left: 5px;
+}
+
+.sidebar .group_options {
+  border-bottom: 1px solid #fff;
+  padding-bottom: 1.5rem;
+}
+
+.sidebar .list-group .list-group-item {
+  background: none;
+}
+
+.sidebar .list-group .list-group-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+}
+
+.sidebar .list-group .list-group-item span.file_count {
+  font-size: 0.7rem;
+  color: #fff;
+  display: inline-block;
+  margin-left: 3px;
+}
+
+.sidebar .list-group .list-group-item .folder_name {
+  color: #fff;
+  display: inline-block;
+  margin-left: 10px;
+}
+
+.sidebar .folders-wrap {
+  height: auto;
+  overflow: auto;
+  max-height: 500px;
+}
+
+.sidebar .folders-wrap h3 {
+  color: rgba(200, 200, 200, 1);
+  font-size: 0.9rem;
+}
+/* ------------------------divider------------------------------ */
+.divider {
+  flex-shrink: 0;
+  width: 0.8rem;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.1);
+  border: solid rgba(0, 0, 0, 0.15);
+  border-width: 1px 0;
+  box-shadow: inset 0 0.5em 1.5em rgb(0 0 0 / 10%),
+    inset 0 0.125em 0.5em rgb(0 0 0 / 15%);
+}
+
+/*----------------- Directory Styles --------------------*/
+.directory-wrapper {
+  // width: 28rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.directory-wrapper .directory-header {
+  display: flex;
+  flex-direction: row;
+}
+
+.directory-wrapper .directory-header input {
+  border-radius: 0;
+  border: 0;
+}
+
+.directory-wrapper .right-pane .directory-wrapper .groupings {
+  display: flex;
+}
+
+.directory-wrapper .groupings .badge-label {
+  display: inline-block;
+  font-size: 0.85rem;
+}
+
+.directory-wrapper .groupings .badge {
+  border-radius: 0;
+}
+
+.directory-wrapper .filter-wrap {
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 2rem 0 0.5rem;
+  text-transform: capitalize;
+  align-items: center;
+}
+
+.directory-wrapper .filter-wrap .select-all-check {
+  align-items: center;
+}
+.directory-wrapper .filter-wrap .select-all-check {
+  gap: 5px;
+}
+
+/* ----------------- Card Styles --------------- */
+.files .card {
+  margin-bottom: 1rem;
+}
+.files .card .card-body,
+.files .card .card-footer {
+  padding: 0.5rem 0.5rem;
+}
+
+.files .card .card-body .file-card-info .input-group-text {
+  padding: 0;
+  background: transparent;
+  border: none;
+}
+
+.files .card .card-body .left-pane {
+  padding-left: 0.5rem;
+  width: 100%;
+}
+
+.files .card .card-body .left-pane h1.title {
+  font-size: 1.2rem;
+  margin-bottom: 0.2rem;
+}
+
+.files .card .card-body .left-pane h1.title a {
+  max-width: 22rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  display: inline-block;
+}
+
+.files .card .card-body .left-pane .artists {
+  font-size: 0.89rem;
+  margin-bottom: 1rem;
+}
+
+.files .card .card-body .left-pane .groupings .badge a,
+.files .card .card-body .left-pane .artists .feature a {
+  text-decoration: none;
+}
+
+.files .card .card-body .left-pane .artists .feature a {
+  display: block;
+  margin-left: 5px;
+}
+
+.files .card .card-body .left-pane .artists .feature a:hover {
+  color: red;
+}
+
+.files .card .card-body .left-pane .groupings .badge {
+  margin-left: 3px;
+}
+
+.files .card .card-body .left-pane .groupings .badge a {
+  color: #fff;
+}
+
+.files .card .card-body .right-pane span {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+/* ------ Card Footer----- */
+.files .card .card-footer .bottom-pane .actions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.files .card .card-footer .bottom-pane .actions a {
+  display: inline;
+  width: 18px;
+  height: 18px;
+  margin-right: 5px;
+}
+.files .card .card-footer .bottom-pane {
+  font-size: 0.75rem;
+  text-transform: capitalize;
+}
+
+.files .card .card-footer .bottom-pane .seperator {
+  margin: 0 3px;
+}
+
+.files .card .card-footer .bottom-pane .folder {
+  display: inline-block;
+  margin-left: 2px;
+}
+
+.files .card .card-footer .bottom-pane .path_link {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+.files .card .card-footer .bottom-pane .path_link a.reveal {
+  display: inline-block;
+  margin-left: 5px;
+}
+
+/* ----------------- File Form Styles --------------- */
+
+.form_box {
+  margin-right: auto;
+  width: 28rem;
+  background-color: #fff;
+  position: absolute;
+  left: 0;
+  top: 20px;
+  transform: translate3d(-100vw, 0, 0);
+  transition: transform 0.1s cubic-bezier(0, 0.52, 0, 1);
+  height: auto;
+  border-top: 2px solid rgba(13, 110, 253, 0.5);
+  border-bottom: 2px solid rgba(13, 110, 253, 0.5);
+  border-right: 2px solid rgba(13, 110, 253, 0.5);
+}
+
+.form_box.open {
+  transform: translate3d(0vw, 0, 0);
+}
+
+.flyout_form .row {
+  margin-bottom: 1rem;
+}
+
+.flyout_form .bpm a.analyze_bpm {
+  font-size: 0.65rem;
+  color: #222;
+  text-decoration: none;
+  margin-top: 2px;
+  display: block;
+  text-align: end;
+}
+
+.flyout_form .form-label {
+  margin-bottom: 0.2rem;
+  text-transform: capitalize;
+}
+
+.flyout_form .form-control,
+.flyout_form .form-control {
+  border-radius: 0;
+  min-height: 36px;
+}
+
+.flyout_form.visible {
+  transform: 0vw, 0, 0;
+}
+
+.file_form .bpm .analyze_bpm {
+  text-decoration: none;
+  color: grey;
+  font-size: 0.55rem;
+  display: block;
+  text-align: right;
+}
+
+.file_form .col .location_path span,
+.file_form .bpm .analyze_bpm {
+  font-style: italic;
+}
+
+.file_form .col .location_path {
+  font-size: 0.75rem;
+  justify-content: flex-start;
+  color: grey;
+}
+
+.file_form .col .location_path span {
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.file_form .col .location_path span:first-child {
+  font-weight: bold;
+  text-transform: capitalize;
+  font-style: normal;
+}
+
+.form_box a.arrow {
+  display: flex;
+  text-decoration: none;
+  justify-content: center;
+  padding: 0.5rem 0;
+  background: #f0f6ff;
+}
+
+.form_box a.arrow-up {
+  margin-bottom: 1rem;
+}
+
+.form_box a.arrow-down {
+  margin-top: 1.5rem;
+}
+
+.form_box a.arrow:hover {
+  background: #bed8fe;
+  transition: 0.2s;
+}
+
+.form_box .location_path {
+  font-size: 0.75rem;
+  color: #222;
+}
+
+.form_box .location_path span.label {
+  margin-right: 5px;
+  text-transform: capitalize;
+  font-weight: 600;
+}
+
+.form_box .location_path a.path_name {
+  text-decoration: none;
+}

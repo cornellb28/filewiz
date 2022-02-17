@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "module": "CommonJS",
+    "target": "esnext",
+    "outDir": "./buildts",
+    "sourceMap": true
+  },
+  "include": ["electrondev/**/*"]
+}
