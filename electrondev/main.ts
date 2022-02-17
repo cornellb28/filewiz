@@ -82,7 +82,6 @@ ipcMain.handle("upload-files", async (event) => {
 
   // user selected cancel button
   if (dialogButton.canceled) return;
-
   // User selected a filepath. continue -->
   const rootDir = dialogButton.filePaths; // Selected directory path
   const audioFiles = await scanDirectory(rootDir); // returns selected directory files (scanned)
