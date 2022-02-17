@@ -1,5 +1,14 @@
 // Modules to control application life and create native browser window
 import { BrowserWindow, app, ipcMain, dialog } from "electron";
+import {
+  Image,
+  UserDefinedText,
+  Artists,
+  TrackTitle,
+  Comment,
+  Ratings,
+  Samples,
+} from "../src/types/TrackMeta";
 import * as path from "path";
 import * as glob from "glob";
 import * as NodeID3 from "node-id3";
@@ -9,7 +18,6 @@ import * as _ from "lodash";
 
 const createWindow = () => {
   // Create the browser window.
-  console.log(__dirname);
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
@@ -80,18 +88,6 @@ ipcMain.handle("upload-files", async (event) => {
   const audioFiles = await scanDirectory(rootDir); // returns selected directory files (scanned)
 
   // create an interface to show object model
-  type Image = { mime: string; imageBuffer: Buffer };
-  type UserDefinedtext = { description: string; value: string };
-  type Artists = { performerInfo: string; features: string[] };
-  type TrackTitle = { name: string; version: string };
-  type Comment = {
-    language: string;
-    shortText: undefined | string;
-    text: string[];
-  };
-  type Ratings = { ratings: number };
-  type Samples = { sample_artist: string; sample_title: string };
-
   interface TrackData {
     title: TrackTitle;
     artist: Artists;
@@ -99,7 +95,7 @@ ipcMain.handle("upload-files", async (event) => {
     contentGroup: string[];
     year: string;
     initialKey: string;
-    userDefinedText: UserDefinedtext[];
+    userDefinedText: UserDefinedText[];
     bpm: string;
     image: Image;
     publisher: string[];
@@ -113,11 +109,6 @@ ipcMain.handle("upload-files", async (event) => {
     SampleInfo: Samples;
     artistUrl: string[];
   }
-
-  // empty array to send selection
-  // const songs: TrackData {
-
-  // };
 
   for (let audioPath of audioFiles.slice(0, 50)) {
     // set a promise that resolve the promise if tags exist //
@@ -133,32 +124,32 @@ ipcMain.handle("upload-files", async (event) => {
     });
     // early exit
     if (tags === null) continue; // tags does not exist move on to the next audio file
+    console.log(tags);
+    // let audioObject = {
+    //   ...tags,
+    // };
+    // const { image, comment } = audioObject;
+    // if (
+    //   typeof image === "undefined" ||
+    //   typeof image === "string" ||
+    //   typeof comment === "undefined" ||
+    //   typeof comment === "string"
+    // )
+    //   continue;
 
-    let audioObject = {
-      ...tags,
-    };
-    const { image, comment } = audioObject;
-    if (
-      typeof image === "undefined" ||
-      typeof image === "string" ||
-      typeof comment === "undefined" ||
-      typeof comment === "string"
-    )
-      continue;
+    // const { text } = comment;
+    // const { imageBuffer } = image;
 
-    const { text } = comment;
-    const { imageBuffer } = image;
+    // let dataImageLarge = sharp(Buffer.from(imageBuffer)).resize(100);
+    // // let dataImageMedium = sharp(Buffer.from(imageBuffer)).resize(50)
+    // // let dataImageSmall = sharp(Buffer.from(imageBuffer)).resize(35)
+    // // let dataMime = mime.split('/')[1].toLowerCase()
+    // // await dataImage.toFile(`..covers/record-${id}.${dataMime}`)
 
-    let dataImageLarge = sharp(Buffer.from(imageBuffer)).resize(100);
-    // let dataImageMedium = sharp(Buffer.from(imageBuffer)).resize(50)
-    // let dataImageSmall = sharp(Buffer.from(imageBuffer)).resize(35)
-    // let dataMime = mime.split('/')[1].toLowerCase()
-    // await dataImage.toFile(`..covers/record-${id}.${dataMime}`)
+    // const data = JSON.stringify(audioObject);
 
-    const data = JSON.stringify(audioObject);
-
-    const coverBuffer = await dataImageLarge.jpeg({ quality: 100 }).toBuffer();
-    const updatedFile = _.omit(audioObject, ["image", "comment"]);
+    // const coverBuffer = await dataImageLarge.jpeg({ quality: 100 }).toBuffer();
+    // const updatedFile = _.omit(audioObject, ["image", "comment"]);
     // songs.push({
     //   cover: `data:image/jpeg;base64,` + coverBuffer.toString('base64'),
     //   ...updatedFile,
