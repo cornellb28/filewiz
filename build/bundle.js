@@ -3864,7 +3864,7 @@ __webpack_require__.$Refresh$.runtime = __webpack_require__(/*! ./node_modules/r
 
 
 
-react_dom__WEBPACK_IMPORTED_MODULE_1__.render( /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_App__WEBPACK_IMPORTED_MODULE_2__["default"], {}), document.getElementById('root'));
+react_dom__WEBPACK_IMPORTED_MODULE_1__.render( /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_App__WEBPACK_IMPORTED_MODULE_2__["default"], {}), document.getElementById("root"));
 
 const $ReactRefreshModuleId$ = __webpack_require__.$Refresh$.moduleId;
 const $ReactRefreshCurrentExports$ = __react_refresh_utils__.getModuleExports(
