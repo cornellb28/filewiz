@@ -1,7 +1,7 @@
 {
   "name": "v1",
   "version": "1.0.0",
-  "main": "buildts/main.js",
+  "main": "buildts/electrondev/main.js",
   "license": "MIT",
   "scripts": {
     "start:dev:electron-build": "tsc --watch --project tsconfig.backend.json",

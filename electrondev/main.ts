@@ -80,7 +80,7 @@ ipcMain.handle("upload-files", async (event) => {
     });
   }
 
-  // user selected cancel button
+  // user selected cancel button to show
   if (dialogButton.canceled) return;
   // User selected a filepath. continue -->
   const rootDir = dialogButton.filePaths; // Selected directory path
