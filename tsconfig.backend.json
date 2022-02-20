@@ -4,7 +4,8 @@
     "module": "CommonJS",
     "target": "esnext",
     "outDir": "./buildts",
-    "sourceMap": true
+    "sourceMap": true,
+    "types": ["node"] // https://bobbyhadz.com/blog/typescript-cannot-find-module-path
   },
-  "include": ["electrondev/**/*"]
+  "include": ["electrondev/**/*", "models/**/*"]
 }

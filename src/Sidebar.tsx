@@ -1,22 +1,22 @@
-import * as React from 'react'
-import Folders from './components/Folders'
-import { Col, Stack, Button, ListGroup } from 'react-bootstrap'
-import { TrackMeta } from './types/TrackMeta'
+import * as React from "react";
+import Folders from "./components/Folders";
+import { Col, Stack, Button, ListGroup } from "react-bootstrap";
+import { TrackMeta } from "./types/TrackMeta";
 
 declare global {
   interface Window {
     fileApp: {
       // type generics -- returning a promise that will be a
-      getDirectoryRoot: () => Promise<string[]>
-      getNames: () => string[]
-      addArtist: (name: string) => void
-    }
+      getDirectoryRoot: () => Promise<string[]>;
+      getNames: () => string[];
+      addArtist: (name: string) => void;
+    };
   }
 }
 
 interface IProps {
-  filesData: TrackMeta
-  setFilesData: React.Dispatch<React.SetStateAction<TrackMeta>>
+  filesData: TrackMeta;
+  setFilesData: React.Dispatch<React.SetStateAction<TrackMeta>>;
 }
 
 const Header = () => {
@@ -28,21 +28,21 @@ const Header = () => {
       </div>
       <i className="bx bx-menu-alt-right btn bx-md"></i>
     </Stack>
-  )
-}
+  );
+};
 
 const ScanDirectoryAction = ({
   setFilesData,
 }: {
   // This way I just pick the prop I need from my interface
-  setFilesData: IProps['setFilesData']
+  setFilesData: IProps["setFilesData"];
 }) => {
   const scanDir = async () => {
-    const files = await window.fileApp.getDirectoryRoot()
+    const files = await window.fileApp.getDirectoryRoot();
     // @ts-ignore
     // setFileData(files as any) only when I'm taking to much time
-    setFilesData(files)
-  }
+    setFilesData(files);
+  };
 
   return (
     <Stack className="scan_directory" direction="horizontal">
@@ -51,8 +51,8 @@ const ScanDirectoryAction = ({
         <span>Scan Directory</span>
       </Button>
     </Stack>
-  )
-}
+  );
+};
 
 const SidebarAction = () => {
   return (
@@ -66,8 +66,8 @@ const SidebarAction = () => {
         <span className="folder_name">Gotos Songs</span>
       </ListGroup.Item>
     </ListGroup>
-  )
-}
+  );
+};
 
 const Sidebar = ({ filesData, setFilesData }: IProps) => {
   //console.log(window.fileApp.addArtist('Bob James'))
@@ -81,7 +81,7 @@ const Sidebar = ({ filesData, setFilesData }: IProps) => {
         <Folders filesData={filesData} />
       </div>
     </Col>
-  )
-}
+  );
+};
 
-export default Sidebar
+export default Sidebar;

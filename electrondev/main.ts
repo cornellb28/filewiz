@@ -10,11 +10,13 @@ import {
   Samples,
 } from "../src/types/TrackMeta";
 import * as path from "path";
-import * as glob from "glob";
+//import glob = require("glob");
 import * as NodeID3 from "node-id3";
 import * as sharp from "sharp";
 import * as uniqid from "uniqid";
 import * as _ from "lodash";
+
+const glob = require("glob");
 
 const createWindow = () => {
   // Create the browser window.
@@ -24,12 +26,12 @@ const createWindow = () => {
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      preload: path.join(__dirname, "electrondev/preload.js"),
+      preload: path.join(__dirname, "preload.js"),
     },
   });
 
   // and load the index.html of the app.
-  mainWindow.loadFile(path.join(__dirname, "../public/index.html"));
+  mainWindow.loadFile(path.join(process.cwd(), "build/index.html"));
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
@@ -70,13 +72,17 @@ ipcMain.handle("upload-files", async (event) => {
   async function scanDirectory(filepath: string[]) {
     //console.log(filepath[0]) returns etc "/Volumes/MUSICLITE/CAPITALRECORDS/90s"
     return new Promise<string[]>((resolve, reject) => {
-      glob("/**/*.mp3", { root: filepath[0] }, (err, files) => {
-        try {
-          resolve(files);
-        } catch (error) {
-          reject(error);
+      glob(
+        "/**/*.mp3",
+        { root: filepath[0] },
+        (err: Error | null, files: string[]) => {
+          try {
+            resolve(files);
+          } catch (error) {
+            reject(error);
+          }
         }
-      });
+      );
     });
   }
 

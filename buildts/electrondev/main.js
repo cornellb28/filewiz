@@ -3,8 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // Modules to control application life and create native browser window
 const electron_1 = require("electron");
 const path = require("path");
-const glob = require("glob");
+//import glob = require("glob");
 const NodeID3 = require("node-id3");
+const glob = require("glob");
 const createWindow = () => {
     // Create the browser window.
     const mainWindow = new electron_1.BrowserWindow({
@@ -13,11 +14,11 @@ const createWindow = () => {
         webPreferences: {
             nodeIntegration: false,
             contextIsolation: true,
-            preload: path.join(__dirname, "electrondev/preload.js"),
+            preload: path.join(__dirname, "preload.js"),
         },
     });
     // and load the index.html of the app.
-    mainWindow.loadFile(path.join(__dirname, "../public/index.html"));
+    mainWindow.loadFile(path.join(process.cwd(), "build/index.html"));
     // Open the DevTools.
     // mainWindow.webContents.openDevTools()
 };
