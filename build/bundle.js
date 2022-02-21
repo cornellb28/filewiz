@@ -3196,7 +3196,7 @@ var Header = function Header() {
         className: "bx bx-music"
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
         className: "logo_name",
-        children: "filewiz"
+        children: "filewizz"
       })]
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("i", {
       className: "bx bx-menu-alt-right btn bx-md"
@@ -3242,7 +3242,7 @@ var ScanDirectoryAction = function ScanDirectoryAction(_ref) {
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_6__["default"], {
       variant: "primary",
       onClick: function onClick() {
-        return scanDir();
+        return scanDir;
       },
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("i", {
         className: "bx bx-upload bx-s"

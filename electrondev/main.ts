@@ -9,14 +9,12 @@ import {
   Ratings,
   Samples,
 } from "../src/types/TrackMeta";
-import * as path from "path";
-//import glob = require("glob");
-import * as NodeID3 from "node-id3";
-import * as sharp from "sharp";
-import * as uniqid from "uniqid";
-import * as _ from "lodash";
-
-const glob = require("glob");
+import path from "path";
+import NodeID3 from "node-id3";
+import sharp from "sharp";
+import glob from "glob";
+import uniqid from "uniqid";
+import _ from "lodash";
 
 const createWindow = () => {
   // Create the browser window.
@@ -26,7 +24,7 @@ const createWindow = () => {
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      preload: path.join(__dirname, "preload.js"),
+      preload: path.join(process.cwd(), "./buildts/electrondev/preload.js"),
     },
   });
 

@@ -1,12 +1,10 @@
-import dbmgr from './dbMgr'
+import db from "./dbMgr";
 
-const db = dbmgr.db
+const getTracks = () => {
+  const sql = "SELECT * FROM track";
+  let stmt = db.prepare(sql);
+  let res = stmt.all();
+  return res;
+};
 
-exports.getTracks = () => {
-  const sql = 'SELECT * FROM track'
-  let stmt = db.prepare(sql)
-  let res = stmt.all()
-  return res
-}
-
-
+export = { getTracks };

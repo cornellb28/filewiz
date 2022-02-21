@@ -24,7 +24,7 @@ const Header = () => {
     <Stack className="logo_content" direction="horizontal">
       <div className="logo">
         <i className="bx bx-music"></i>
-        <span className="logo_name">filewiz</span>
+        <span className="logo_name">filewizz</span>
       </div>
       <i className="bx bx-menu-alt-right btn bx-md"></i>
     </Stack>
@@ -43,10 +43,9 @@ const ScanDirectoryAction = ({
     // setFileData(files as any) only when I'm taking to much time
     setFilesData(files);
   };
-
   return (
     <Stack className="scan_directory" direction="horizontal">
-      <Button variant="primary" onClick={() => scanDir()}>
+      <Button variant="primary" onClick={() => scanDir}>
         <i className="bx bx-upload bx-s"></i>
         <span>Scan Directory</span>
       </Button>
