@@ -1,20 +1,18 @@
-import * as React from 'react'
-import FileForm from './components/FileForm'
-import Files from './Files'
-import { Col, Form } from 'react-bootstrap'
-import { SideBarContext } from './App'
-
+import * as React from "react";
+import FileForm from "./components/FileForm";
+import Files from "./Files";
+import { Col, Form } from "react-bootstrap";
+import { SideBarContext } from "./App";
 
 const DirectoryHeader: React.FC = () => {
   return (
     <div className="directory-header">
       <Form.Control id="disabledTextInput" placeholder="Search Directory..." />
     </div>
-  )
-}
+  );
+};
 
 const DirectoryFilter: React.FC = () => {
-  
   return (
     <div className="filter-wrap d-flex">
       <section className="select-all-check d-flex">
@@ -41,17 +39,17 @@ const DirectoryFilter: React.FC = () => {
         </select>
       </section>
     </div>
-  )
-}
+  );
+};
 
 const Directory: React.FC = () => {
   return (
-    <Col md={4} className="directory-wrapper">
+    <Col md={3} className="directory-wrapper">
       <DirectoryHeader />
       <DirectoryFilter />
       <Files />
     </Col>
-  )
-}
+  );
+};
 
-export default Directory
+export default Directory;

@@ -9,14 +9,14 @@ import {
   Ratings,
   Samples,
 } from "../src/types/TrackMeta";
-import path from "path";
-import NodeID3 from "node-id3";
-import sharp from "sharp";
-import glob from "glob";
-import uniqid from "uniqid";
-import _ from "lodash";
+import * as path from "path";
+import * as NodeID3 from "node-id3";
+import * as sharp from "sharp";
+import * as glob from "glob";
+import * as uniqid from "uniqid";
+import * as _ from "lodash";
 
-const createWindow = () => {
+function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 800,
@@ -33,7 +33,7 @@ const createWindow = () => {
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
-};
+}
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.

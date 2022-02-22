@@ -19,7 +19,7 @@ const genreOptions: GenreOption[] = [
   { value: 'house', label: 'House', color: '#00B8D9', isFixed: true },
 ]
 
-const FileForm: React.FC = () => {
+const FileForm = () => {
   const { trackId, setTrackId } = React.useContext(SideBarContext)
   const handleChange = (
     newValue: OnChangeValue<GenreOption, true>,

@@ -1,15 +1,15 @@
-import * as React from 'react'
-import { InputGroup, Card } from 'react-bootstrap'
-import { SideBarContext } from '../App'
+import * as React from "react";
+import { InputGroup, Card } from "react-bootstrap";
+import { SideBarContext } from "../App";
 
 const FileFooter: React.FC = () => {
-  const { trackId, setTrackId } = React.useContext(SideBarContext)
+  const { trackId, setTrackId } = React.useContext(SideBarContext);
   return (
     <Card.Footer>
       <section className="bottom-pane">
         <div className="d-flex flex-row justify-content-between">
           <div className="actions">
-            <a href="#" onClick={() => setTrackId('abc')}>
+            <a href="#" onClick={() => setTrackId("abc")}>
               <i className="bx bxs-edit bx-xs"></i>
             </a>
             <a href="#">
@@ -31,8 +31,8 @@ const FileFooter: React.FC = () => {
         </div>
       </section>
     </Card.Footer>
-  )
-}
+  );
+};
 
 const FileBody: React.FC = () => {
   return (
@@ -83,16 +83,16 @@ const FileBody: React.FC = () => {
         </div>
       </section>
     </Card.Body>
-  )
-}
+  );
+};
 
-const File: React.FC = () => {
+const File = () => {
   return (
     <Card>
       <FileBody />
       <FileFooter />
     </Card>
-  )
-}
+  );
+};
 
-export default File
+export default File;

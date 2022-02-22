@@ -1,6 +1,6 @@
-@import '~bootstrap/scss/bootstrap';
-@import './custom.scss';
-@import 'boxicons/css/boxicons.min.css';
+@import "~bootstrap/scss/bootstrap";
+@import "./custom.scss";
+@import "boxicons/css/boxicons.min.css";
 
 // Global Font for app
 // @font-face {
@@ -198,7 +198,7 @@ a:hover {
   gap: 5px;
 }
 
-/* ----------------- Card Styles --------------- */
+/* ----------------- Directory Card Styles --------------- */
 .files .card {
   margin-bottom: 1rem;
 }
@@ -264,7 +264,7 @@ a:hover {
   justify-content: center;
 }
 
-/* ------ Card Footer----- */
+/* ------ Directory Card Footer----- */
 .files .card .card-footer .bottom-pane .actions {
   display: flex;
   flex-direction: row;
@@ -415,4 +415,45 @@ a:hover {
 
 .form_box .location_path a.path_name {
   text-decoration: none;
+}
+
+/* ----------------- Right Pane Styles --------------- */
+.right-pane {
+  position: relative;
+  padding: 0;
+
+  .nav-tabs {
+    border-bottom: 2px solid #1d2636;
+    .nav-link.active {
+      border-bottom: 0;
+    }
+  }
+
+  .tab-pane .card {
+    border-radius: 0;
+    position: relative;
+
+    .card-img {
+      max-width: 202px;
+      width: 100%;
+    }
+
+    .card-body {
+      display: none;
+    }
+  }
+
+  .create-playlist {
+    padding: 0.2rem 0.5rem;
+    text-transform: capitalize;
+    font-size: 0.8rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+
+    i {
+      margin-left: 0.4rem;
+      margin-top: 2px;
+    }
+  }
 }
