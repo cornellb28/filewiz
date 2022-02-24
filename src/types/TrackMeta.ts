@@ -14,7 +14,7 @@ export type TrackMeta = {
   initialKey: string;
   userDefinedText: UserDefinedText[];
   bpm: string;
-  image: Image;
+  image: ImageMeta;
   publisher: string[];
   comment: Comment;
   composer: string[];
@@ -27,11 +27,11 @@ export type TrackMeta = {
   artistUrl: string[];
 }[];
 
-export type Image = { mime: string; imageBuffer: Buffer };
+export type ImageMeta = { mime: string; imageBuffer: Buffer };
 export type UserDefinedText = { description: string; value: string };
 export type Artists = { performerInfo: string; features: string[] };
 export type TrackTitle = { name: string; version: string };
-export type Comment = {
+export type CommentMeta = {
   language: string;
   shortText: undefined | string;
   text: string[];

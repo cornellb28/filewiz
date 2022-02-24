@@ -1,38 +1,38 @@
-import * as React from 'react'
-import { Col, Form, Row, InputGroup, FormControl } from 'react-bootstrap'
-import CreatableSelect from 'react-select/creatable'
-import { ActionMeta, OnChangeValue } from 'react-select'
-import { SideBarContext } from '../App'
+import * as React from "react";
+import { Col, Form, Row, InputGroup, FormControl } from "react-bootstrap";
+import CreatableSelect from "react-select/creatable";
+import { ActionMeta, OnChangeValue } from "react-select";
+import { SideBarContext } from "../App";
 
 interface GenreOption {
-  value: string
-  label: string
-  color: string
-  isFixed?: boolean
-  isDisabled?: boolean
+  value: string;
+  label: string;
+  color: string;
+  isFixed?: boolean;
+  isDisabled?: boolean;
 }
 
 const genreOptions: GenreOption[] = [
-  { value: 'hiphop', label: 'Hip Hop', color: '#00B8D9', isFixed: true },
-  { value: 'soul', label: 'Soul', color: '#00B8D9', isFixed: true },
-  { value: 'dance', label: 'Dance', color: '#00B8D9', isFixed: true },
-  { value: 'house', label: 'House', color: '#00B8D9', isFixed: true },
-]
+  { value: "hiphop", label: "Hip Hop", color: "#00B8D9", isFixed: true },
+  { value: "soul", label: "Soul", color: "#00B8D9", isFixed: true },
+  { value: "dance", label: "Dance", color: "#00B8D9", isFixed: true },
+  { value: "house", label: "House", color: "#00B8D9", isFixed: true },
+];
 
 const FileForm = () => {
-  const { trackId, setTrackId } = React.useContext(SideBarContext)
+  const { trackId, setTrackId } = React.useContext(SideBarContext);
   const handleChange = (
     newValue: OnChangeValue<GenreOption, true>,
     actionMeta: ActionMeta<GenreOption>
   ) => {
-    console.group('Value Changed')
-    console.log(newValue)
-    console.log(`action: ${actionMeta.action}`)
-    console.groupEnd()
-  }
+    console.group("Value Changed");
+    console.log(newValue);
+    console.log(`action: ${actionMeta.action}`);
+    console.groupEnd();
+  };
 
   return (
-    <section className={`form_box ${trackId !== null ? 'open' : ''}`}>
+    <section className={`form_box ${trackId !== null ? "open" : ""}`}>
       <a className="arrow arrow-up" title="Prev" href="#">
         <i className="bx bxs-chevrons-up bx-md"></i>
       </a>
@@ -146,7 +146,7 @@ const FileForm = () => {
         <i className="bx bxs-chevrons-down bx-md"></i>
       </a>
     </section>
-  )
-}
+  );
+};
 
-export default FileForm
+export default FileForm;

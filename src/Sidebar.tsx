@@ -37,15 +37,20 @@ const ScanDirectoryAction = ({
   // This way I just pick the prop I need from my interface
   setFilesData: IProps["setFilesData"];
 }) => {
-  const scanDir = async () => {
-    const files = await window.fileApp.getDirectoryRoot();
+  const scanDir = () => {
+    console.log("Sacn The Dir");
+    //const files = await window.fileApp.getDirectoryRoot();
     // @ts-ignore
     // setFileData(files as any) only when I'm taking to much time
-    setFilesData(files);
+    //setFilesData(files);
+  };
+
+  const handleChange = () => {
+    console.log("Kanye:West");
   };
   return (
     <Stack className="scan_directory" direction="horizontal">
-      <Button variant="primary" onClick={() => scanDir}>
+      <Button variant="primary" onClick={() => handleChange}>
         <i className="bx bx-upload bx-s"></i>
         <span>Scan Directory</span>
       </Button>

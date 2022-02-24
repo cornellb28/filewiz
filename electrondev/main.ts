@@ -1,20 +1,20 @@
 // Modules to control application life and create native browser window
 import { BrowserWindow, app, ipcMain, dialog } from "electron";
+import NodeID3 from "node-id3";
 import {
-  Image,
+  ImageMeta,
   UserDefinedText,
   Artists,
   TrackTitle,
-  Comment,
+  CommentMeta,
   Ratings,
   Samples,
 } from "../src/types/TrackMeta";
-import * as path from "path";
-import * as NodeID3 from "node-id3";
-import * as sharp from "sharp";
-import * as glob from "glob";
+import path from "path";
+import sharp from "sharp";
 import * as uniqid from "uniqid";
-import * as _ from "lodash";
+import { glob } from "glob";
+import _ from "lodash";
 
 function createWindow() {
   // Create the browser window.
@@ -73,7 +73,7 @@ ipcMain.handle("upload-files", async (event) => {
       glob(
         "/**/*.mp3",
         { root: filepath[0] },
-        (err: Error | null, files: string[]) => {
+        (err, files: string[]) => {
           try {
             resolve(files);
           } catch (error) {
@@ -100,9 +100,9 @@ ipcMain.handle("upload-files", async (event) => {
     initialKey: string;
     userDefinedText: UserDefinedText[];
     bpm: string;
-    image: Image;
+    image: ImageMeta;
     publisher: string[];
-    comment: Comment;
+    comment: CommentMeta;
     composer: string[];
     remixArtist: string[];
     album: string;

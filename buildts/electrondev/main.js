@@ -1,10 +1,13 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 // Modules to control application life and create native browser window
 const electron_1 = require("electron");
-const path = require("path");
-const NodeID3 = require("node-id3");
-const glob = require("glob");
+const node_id3_1 = __importDefault(require("node-id3"));
+const path_1 = __importDefault(require("path"));
+const glob_1 = require("glob");
 function createWindow() {
     // Create the browser window.
     const mainWindow = new electron_1.BrowserWindow({
@@ -13,11 +16,11 @@ function createWindow() {
         webPreferences: {
             nodeIntegration: false,
             contextIsolation: true,
-            preload: path.join(process.cwd(), "./buildts/electrondev/preload.js"),
+            preload: path_1.default.join(process.cwd(), "./buildts/electrondev/preload.js"),
         },
     });
     // and load the index.html of the app.
-    mainWindow.loadFile(path.join(process.cwd(), "build/index.html"));
+    mainWindow.loadFile(path_1.default.join(process.cwd(), "build/index.html"));
     // Open the DevTools.
     // mainWindow.webContents.openDevTools()
 }
@@ -52,7 +55,7 @@ electron_1.ipcMain.handle("upload-files", async (event) => {
     async function scanDirectory(filepath) {
         //console.log(filepath[0]) returns etc "/Volumes/MUSICLITE/CAPITALRECORDS/90s"
         return new Promise((resolve, reject) => {
-            glob("/**/*.mp3", { root: filepath[0] }, (err, files) => {
+            (0, glob_1.glob)("/**/*.mp3", { root: filepath[0] }, (err, files) => {
                 try {
                     resolve(files);
                 }
@@ -71,7 +74,7 @@ electron_1.ipcMain.handle("upload-files", async (event) => {
     for (let audioPath of audioFiles.slice(0, 50)) {
         // set a promise that resolve the promise if tags exist //
         const tags = await new Promise((resolve, reject) => {
-            NodeID3.read(audioPath, { noRaw: true }, (err, tags) => {
+            node_id3_1.default.read(audioPath, { noRaw: true }, (err, tags) => {
                 // early exit
                 if (err) {
                     console.log("nodeid3 issue", err);
