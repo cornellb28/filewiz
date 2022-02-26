@@ -26,7 +26,6 @@ const App = () => {
       <SideBarContext.Provider value={{ trackId, setTrackId }}>
         <Container fluid>
           <Row>
-            <button onClick={() => console.log("hello")}>Kanye</button>
             <Sidebar filesData={filesData} setFilesData={setFilesData} />
             <Divider />
             <Directory />

@@ -2,34 +2,36 @@
 // Interface can't become an array
 export type TrackMeta = {
   trackId: string;
-  cover: string;
+  trackCover?: ImageMeta;
   userDefinedUrl: {}[];
   location: string;
-  folderPathRoot: string;
-  title: TrackTitle;
-  artist: Artists;
+  title?: TrackTitle;
+  artist?: Artists;
   genre: string[];
   contentGroup: string[];
   year: string;
   initialKey: string;
   userDefinedText: UserDefinedText[];
   bpm: string;
-  image: ImageMeta;
   publisher: string[];
-  comment: Comment;
+  trackComments: CommentMeta;
   composer: string[];
   remixArtist: string[];
   album: string;
-  length: string;
-  popularimeter: Ratings;
+  trackLength: string;
   favorite: boolean;
   SampleInfo: Samples;
-  artistUrl: string[];
+  fileType: string;
 }[];
 
-export type ImageMeta = { mime: string; imageBuffer: Buffer };
+export type ImageMeta = {
+  mime: string | undefined;
+  imageBuffer: Buffer | undefined;
+  type: { id: number; name: string };
+  description: string | undefined;
+};
 export type UserDefinedText = { description: string; value: string };
-export type Artists = { performerInfo: string; features: string[] };
+export type Artists = { artist: string; features: string[] };
 export type TrackTitle = { name: string; version: string };
 export type CommentMeta = {
   language: string;
@@ -37,4 +39,4 @@ export type CommentMeta = {
   text: string[];
 };
 export type Ratings = { ratings: number };
-export type Samples = { sample_artist: string; sample_title: string };
+export type Samples = { sample_artist: string; sample_title: string }[];

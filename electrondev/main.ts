@@ -1,26 +1,26 @@
 // Modules to control application life and create native browser window
 import { BrowserWindow, app, ipcMain, dialog } from "electron";
 import NodeID3 from "node-id3";
-import {
-  ImageMeta,
-  UserDefinedText,
-  Artists,
-  TrackTitle,
-  CommentMeta,
-  Ratings,
-  Samples,
-} from "../src/types/TrackMeta";
+import { TrackMeta } from "../src/types/TrackMeta";
 import path from "path";
+import windowStateKeeper from "electron-window-state";
 import sharp from "sharp";
-import * as uniqid from "uniqid";
+import uniqid from "uniqid";
 import { glob } from "glob";
 import _ from "lodash";
+
+let mainWindowState = windowStateKeeper({
+  defaultWidth: 1400,
+  defaultHeight: 700,
+});
 
 function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    x: mainWindowState.x,
+    y: mainWindowState.y,
+    width: mainWindowState.width,
+    height: mainWindowState.height,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
@@ -33,6 +33,7 @@ function createWindow() {
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
+  mainWindowState.manage(mainWindow);
 }
 
 // This method will be called when Electron has finished
@@ -68,51 +69,23 @@ ipcMain.handle("upload-files", async (event) => {
 
   // Scan the root directory user selected
   async function scanDirectory(filepath: string[]) {
-    //console.log(filepath[0]) returns etc "/Volumes/MUSICLITE/CAPITALRECORDS/90s"
     return new Promise<string[]>((resolve, reject) => {
-      glob(
-        "/**/*.mp3",
-        { root: filepath[0] },
-        (err, files: string[]) => {
-          try {
-            resolve(files);
-          } catch (error) {
-            reject(error);
-          }
+      glob("/**/*.{mp3,m4a}", { root: filepath[0] }, (err, files: string[]) => {
+        try {
+          resolve(files);
+        } catch (error) {
+          reject(error);
         }
-      );
+      });
     });
   }
 
   // user selected cancel button to show
   if (dialogButton.canceled) return;
+
   // User selected a filepath. continue -->
   const rootDir = dialogButton.filePaths; // Selected directory path
   const audioFiles = await scanDirectory(rootDir); // returns selected directory files (scanned)
-
-  // create an interface to show object model
-  interface TrackData {
-    title: TrackTitle;
-    artist: Artists;
-    genre: string[];
-    contentGroup: string[];
-    year: string;
-    initialKey: string;
-    userDefinedText: UserDefinedText[];
-    bpm: string;
-    image: ImageMeta;
-    publisher: string[];
-    comment: CommentMeta;
-    composer: string[];
-    remixArtist: string[];
-    album: string;
-    length: string;
-    popularimeter: Ratings;
-    favorite: boolean;
-    SampleInfo: Samples;
-    artistUrl: string[];
-  }
-
   for (let audioPath of audioFiles.slice(0, 50)) {
     // set a promise that resolve the promise if tags exist //
     const tags = await new Promise<NodeID3.Tags | null>((resolve, reject) => {
@@ -125,23 +98,45 @@ ipcMain.handle("upload-files", async (event) => {
         resolve(tags);
       });
     });
+
     // early exit
     if (tags === null) continue; // tags does not exist move on to the next audio file
-    console.log(tags);
-    // let audioObject = {
-    //   ...tags,
-    // };
-    // const { image, comment } = audioObject;
-    // if (
-    //   typeof image === "undefined" ||
-    //   typeof image === "string" ||
-    //   typeof comment === "undefined" ||
-    //   typeof comment === "string"
-    // )
-    //   continue;
 
-    // const { text } = comment;
-    // const { imageBuffer } = image;
+    let audioObject: TrackMeta = {
+      trackLength: tags.length,
+      trackId: uniqid("track_"),
+      location: audioPath,
+      title: { name: tags.title, version: "" },
+      artist: { artist: tags.artist, features: [] },
+      genre: tags.genre,
+      contentGroup: tags.contentGroup,
+      publisher: tags.publisher,
+      userDefinedText: tags.userDefinedText,
+      bpm: tags.bpm,
+      trackComments: tags.comment,
+      composer: tags.composer,
+      trackCover: tags.image,
+      initialKey: tags.initialKey,
+      remixArtist: tags.remixArtist,
+      favorite: false,
+      fileType: tags.fileType,
+      SampleInfo: [{ sample_artist: "", sample_title: "" }],
+    };
+
+    const { trackCover, trackComments } = audioObject;
+    if (
+      typeof trackCover === "undefined" ||
+      typeof trackCover === "string" ||
+      typeof trackComments === "undefined" ||
+      typeof trackComments === "string"
+    )
+      continue;
+
+    const { text } = trackComments;
+    const { imageBuffer } = trackCover;
+
+    console.log(imageBuffer);
+    console.log(text);
 
     // let dataImageLarge = sharp(Buffer.from(imageBuffer)).resize(100);
     // // let dataImageMedium = sharp(Buffer.from(imageBuffer)).resize(50)

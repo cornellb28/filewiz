@@ -1,11 +1,9 @@
 import * as React from "react";
-import * as fse from "fs-extra";
-import * as path from "path";
 import { ListGroup } from "react-bootstrap";
 import { TrackMeta } from "../types/TrackMeta";
 
 const Folders = ({ filesData }: { filesData: TrackMeta }) => {
-  //console.log(folderView)
+  //console.log(filesData);
   return (
     <ListGroup variant="flush">
       <ListGroup.Item>

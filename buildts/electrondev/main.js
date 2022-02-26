@@ -7,12 +7,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const electron_1 = require("electron");
 const node_id3_1 = __importDefault(require("node-id3"));
 const path_1 = __importDefault(require("path"));
+const electron_window_state_1 = __importDefault(require("electron-window-state"));
+const uniqid_1 = __importDefault(require("uniqid"));
 const glob_1 = require("glob");
+let mainWindowState = (0, electron_window_state_1.default)({
+    defaultWidth: 1400,
+    defaultHeight: 700,
+});
 function createWindow() {
     // Create the browser window.
     const mainWindow = new electron_1.BrowserWindow({
-        width: 800,
-        height: 600,
+        x: mainWindowState.x,
+        y: mainWindowState.y,
+        width: mainWindowState.width,
+        height: mainWindowState.height,
         webPreferences: {
             nodeIntegration: false,
             contextIsolation: true,
@@ -23,6 +31,7 @@ function createWindow() {
     mainWindow.loadFile(path_1.default.join(process.cwd(), "build/index.html"));
     // Open the DevTools.
     // mainWindow.webContents.openDevTools()
+    mainWindowState.manage(mainWindow);
 }
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -53,9 +62,8 @@ electron_1.ipcMain.handle("upload-files", async (event) => {
     });
     // Scan the root directory user selected
     async function scanDirectory(filepath) {
-        //console.log(filepath[0]) returns etc "/Volumes/MUSICLITE/CAPITALRECORDS/90s"
         return new Promise((resolve, reject) => {
-            (0, glob_1.glob)("/**/*.mp3", { root: filepath[0] }, (err, files) => {
+            (0, glob_1.glob)("/**/*.{mp3,m4a}", { root: filepath[0] }, (err, files) => {
                 try {
                     resolve(files);
                 }
@@ -86,20 +94,36 @@ electron_1.ipcMain.handle("upload-files", async (event) => {
         // early exit
         if (tags === null)
             continue; // tags does not exist move on to the next audio file
-        console.log(tags);
-        // let audioObject = {
-        //   ...tags,
-        // };
-        // const { image, comment } = audioObject;
-        // if (
-        //   typeof image === "undefined" ||
-        //   typeof image === "string" ||
-        //   typeof comment === "undefined" ||
-        //   typeof comment === "string"
-        // )
-        //   continue;
-        // const { text } = comment;
-        // const { imageBuffer } = image;
+        let audioObject = {
+            trackLength: tags.length,
+            trackId: (0, uniqid_1.default)("track_"),
+            location: audioPath,
+            title: { name: tags.title, version: "" },
+            artist: { artist: tags.artist, features: [] },
+            genre: tags.genre,
+            contentGroup: tags.contentGroup,
+            publisher: tags.publisher,
+            userDefinedText: tags.userDefinedText,
+            bpm: tags.bpm,
+            trackComments: tags.comment,
+            composer: tags.composer,
+            trackCover: tags.image,
+            initialKey: tags.initialKey,
+            remixArtist: tags.remixArtist,
+            favorite: false,
+            fileType: tags.fileType,
+            SampleInfo: [{ sample_artist: "", sample_title: "" }],
+        };
+        const { trackCover, trackComments } = audioObject;
+        if (typeof trackCover === "undefined" ||
+            typeof trackCover === "string" ||
+            typeof trackComments === "undefined" ||
+            typeof trackComments === "string")
+            continue;
+        const { text } = trackComments;
+        const { imageBuffer } = trackCover;
+        console.log(imageBuffer);
+        console.log(text);
         // let dataImageLarge = sharp(Buffer.from(imageBuffer)).resize(100);
         // // let dataImageMedium = sharp(Buffer.from(imageBuffer)).resize(50)
         // // let dataImageSmall = sharp(Buffer.from(imageBuffer)).resize(35)
