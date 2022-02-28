@@ -1,7 +1,7 @@
 // Modules to control application life and create native browser window
 import { BrowserWindow, app, ipcMain, dialog } from "electron";
 import NodeID3 from "node-id3";
-import { TrackMeta } from "../src/types/TrackMeta";
+import trackMeta from "../src/types/TrackMeta";
 import path from "path";
 import windowStateKeeper from "electron-window-state";
 import sharp from "sharp";
@@ -9,14 +9,15 @@ import uniqid from "uniqid";
 import { glob } from "glob";
 import _ from "lodash";
 
-let mainWindowState = windowStateKeeper({
-  defaultWidth: 1400,
-  defaultHeight: 700,
-});
+let mainWindow: BrowserWindow;
 
 function createWindow() {
+  let mainWindowState = windowStateKeeper({
+    defaultWidth: 1400,
+    defaultHeight: 700,
+  });
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     x: mainWindowState.x,
     y: mainWindowState.y,
     width: mainWindowState.width,
@@ -27,12 +28,8 @@ function createWindow() {
       preload: path.join(process.cwd(), "./buildts/electrondev/preload.js"),
     },
   });
-
   // and load the index.html of the app.
   mainWindow.loadFile(path.join(process.cwd(), "build/index.html"));
-
-  // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
   mainWindowState.manage(mainWindow);
 }
 
@@ -41,7 +38,6 @@ function createWindow() {
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   createWindow();
-
   app.on("activate", () => {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
@@ -70,13 +66,17 @@ ipcMain.handle("upload-files", async (event) => {
   // Scan the root directory user selected
   async function scanDirectory(filepath: string[]) {
     return new Promise<string[]>((resolve, reject) => {
-      glob("/**/*.{mp3,m4a}", { root: filepath[0] }, (err, files: string[]) => {
-        try {
-          resolve(files);
-        } catch (error) {
-          reject(error);
+      glob(
+        "/**/*.+(mp3|m4a)",
+        { root: filepath[0] },
+        (err, files: string[]) => {
+          try {
+            resolve(files);
+          } catch (error) {
+            reject(error);
+          }
         }
-      });
+      );
     });
   }
 
@@ -88,6 +88,7 @@ ipcMain.handle("upload-files", async (event) => {
   const audioFiles = await scanDirectory(rootDir); // returns selected directory files (scanned)
   for (let audioPath of audioFiles.slice(0, 50)) {
     // set a promise that resolve the promise if tags exist //
+
     const tags = await new Promise<NodeID3.Tags | null>((resolve, reject) => {
       NodeID3.read(audioPath, { noRaw: true }, (err, tags) => {
         // early exit
@@ -102,41 +103,64 @@ ipcMain.handle("upload-files", async (event) => {
     // early exit
     if (tags === null) continue; // tags does not exist move on to the next audio file
 
-    let audioObject: TrackMeta = {
-      trackLength: tags.length,
+    let audioObject: trackMeta = {
       trackId: uniqid("track_"),
-      location: audioPath,
-      title: { name: tags.title, version: "" },
       artist: { artist: tags.artist, features: [] },
+      fileType: path.extname(audioPath),
+      year: tags.year,
+      location: audioPath,
       genre: tags.genre,
+      initialKey: tags.initialKey,
+      trackLength: tags.length,
+      favorite: false,
+      bpm: tags.bpm,
+      title: { name: tags.title, version: "" },
       contentGroup: tags.contentGroup,
       publisher: tags.publisher,
-      userDefinedText: tags.userDefinedText,
-      bpm: tags.bpm,
-      trackComments: tags.comment,
       composer: tags.composer,
-      trackCover: tags.image,
-      initialKey: tags.initialKey,
       remixArtist: tags.remixArtist,
-      favorite: false,
-      fileType: tags.fileType,
-      SampleInfo: [{ sample_artist: "", sample_title: "" }],
+      album: tags.album,
     };
 
-    const { trackCover, trackComments } = audioObject;
-    if (
-      typeof trackCover === "undefined" ||
-      typeof trackCover === "string" ||
-      typeof trackComments === "undefined" ||
-      typeof trackComments === "string"
-    )
-      continue;
+    console.log(audioObject);
 
-    const { text } = trackComments;
-    const { imageBuffer } = trackCover;
+    // let audioObject = {
+    //   trackLength: tags.length,
+    //   trackId: uniqid("track_"),
+    //   location: audioPath,
+    //   title: { name: tags.title, version: "" },
+    //   artist: { artist: tags.artist, features: [] },
+    //   genre: tags.genre,
+    //   contentGroup: tags.contentGroup,
+    //   publisher: tags.publisher,
+    //   userDefinedText: tags.userDefinedText,
+    //   bpm: tags.bpm,
+    //   trackComments: tags.comment,
+    //   composer: tags.composer,
+    //   trackCover: tags.image,
+    //   initialKey: tags.initialKey,
+    //   remixArtist: tags.remixArtist,
+    //   favorite: false,
+    //   fileType: tags.fileType,
+    //   SampleInfo: [{ sample_artist: "", sample_title: "" }],
+    // };
 
-    console.log(imageBuffer);
-    console.log(text);
+    // console.log(audioObject);
+
+    // const { trackCover, trackComments } = audioObject;
+    // if (
+    //   typeof trackCover === "undefined" ||
+    //   typeof trackCover === "string" ||
+    //   typeof trackComments === "undefined" ||
+    //   typeof trackComments === "string"
+    // )
+    //   continue;
+
+    // const { text } = trackComments;
+    // const { imageBuffer } = trackCover;
+
+    // console.log(imageBuffer);
+    // console.log(text);
 
     // let dataImageLarge = sharp(Buffer.from(imageBuffer)).resize(100);
     // // let dataImageMedium = sharp(Buffer.from(imageBuffer)).resize(50)

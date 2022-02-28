@@ -10,13 +10,14 @@ const path_1 = __importDefault(require("path"));
 const electron_window_state_1 = __importDefault(require("electron-window-state"));
 const uniqid_1 = __importDefault(require("uniqid"));
 const glob_1 = require("glob");
-let mainWindowState = (0, electron_window_state_1.default)({
-    defaultWidth: 1400,
-    defaultHeight: 700,
-});
+let mainWindow;
 function createWindow() {
+    let mainWindowState = (0, electron_window_state_1.default)({
+        defaultWidth: 1400,
+        defaultHeight: 700,
+    });
     // Create the browser window.
-    const mainWindow = new electron_1.BrowserWindow({
+    mainWindow = new electron_1.BrowserWindow({
         x: mainWindowState.x,
         y: mainWindowState.y,
         width: mainWindowState.width,
@@ -29,8 +30,6 @@ function createWindow() {
     });
     // and load the index.html of the app.
     mainWindow.loadFile(path_1.default.join(process.cwd(), "build/index.html"));
-    // Open the DevTools.
-    // mainWindow.webContents.openDevTools()
     mainWindowState.manage(mainWindow);
 }
 // This method will be called when Electron has finished
@@ -63,7 +62,7 @@ electron_1.ipcMain.handle("upload-files", async (event) => {
     // Scan the root directory user selected
     async function scanDirectory(filepath) {
         return new Promise((resolve, reject) => {
-            (0, glob_1.glob)("/**/*.{mp3,m4a}", { root: filepath[0] }, (err, files) => {
+            (0, glob_1.glob)("/**/*.+(mp3|m4a)", { root: filepath[0] }, (err, files) => {
                 try {
                     resolve(files);
                 }
@@ -95,35 +94,57 @@ electron_1.ipcMain.handle("upload-files", async (event) => {
         if (tags === null)
             continue; // tags does not exist move on to the next audio file
         let audioObject = {
-            trackLength: tags.length,
             trackId: (0, uniqid_1.default)("track_"),
-            location: audioPath,
-            title: { name: tags.title, version: "" },
             artist: { artist: tags.artist, features: [] },
+            fileType: path_1.default.extname(audioPath),
+            year: tags.year,
+            location: audioPath,
             genre: tags.genre,
+            initialKey: tags.initialKey,
+            trackLength: tags.length,
+            favorite: false,
+            bpm: tags.bpm,
+            title: { name: tags.title, version: "" },
             contentGroup: tags.contentGroup,
             publisher: tags.publisher,
-            userDefinedText: tags.userDefinedText,
-            bpm: tags.bpm,
-            trackComments: tags.comment,
             composer: tags.composer,
-            trackCover: tags.image,
-            initialKey: tags.initialKey,
             remixArtist: tags.remixArtist,
-            favorite: false,
-            fileType: tags.fileType,
-            SampleInfo: [{ sample_artist: "", sample_title: "" }],
+            album: tags.album,
         };
-        const { trackCover, trackComments } = audioObject;
-        if (typeof trackCover === "undefined" ||
-            typeof trackCover === "string" ||
-            typeof trackComments === "undefined" ||
-            typeof trackComments === "string")
-            continue;
-        const { text } = trackComments;
-        const { imageBuffer } = trackCover;
-        console.log(imageBuffer);
-        console.log(text);
+        console.log(audioObject);
+        // let audioObject = {
+        //   trackLength: tags.length,
+        //   trackId: uniqid("track_"),
+        //   location: audioPath,
+        //   title: { name: tags.title, version: "" },
+        //   artist: { artist: tags.artist, features: [] },
+        //   genre: tags.genre,
+        //   contentGroup: tags.contentGroup,
+        //   publisher: tags.publisher,
+        //   userDefinedText: tags.userDefinedText,
+        //   bpm: tags.bpm,
+        //   trackComments: tags.comment,
+        //   composer: tags.composer,
+        //   trackCover: tags.image,
+        //   initialKey: tags.initialKey,
+        //   remixArtist: tags.remixArtist,
+        //   favorite: false,
+        //   fileType: tags.fileType,
+        //   SampleInfo: [{ sample_artist: "", sample_title: "" }],
+        // };
+        // console.log(audioObject);
+        // const { trackCover, trackComments } = audioObject;
+        // if (
+        //   typeof trackCover === "undefined" ||
+        //   typeof trackCover === "string" ||
+        //   typeof trackComments === "undefined" ||
+        //   typeof trackComments === "string"
+        // )
+        //   continue;
+        // const { text } = trackComments;
+        // const { imageBuffer } = trackCover;
+        // console.log(imageBuffer);
+        // console.log(text);
         // let dataImageLarge = sharp(Buffer.from(imageBuffer)).resize(100);
         // // let dataImageMedium = sharp(Buffer.from(imageBuffer)).resize(50)
         // // let dataImageSmall = sharp(Buffer.from(imageBuffer)).resize(35)

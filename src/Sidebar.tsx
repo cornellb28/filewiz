@@ -1,7 +1,7 @@
 import * as React from "react";
 import Folders from "./components/Folders";
 import { Col, Stack, Button, ListGroup } from "react-bootstrap";
-import { TrackMeta } from "./types/TrackMeta";
+import TrackMeta from "./types/TrackMeta";
 
 declare global {
   interface Window {
