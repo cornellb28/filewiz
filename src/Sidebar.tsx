@@ -1,7 +1,7 @@
 import * as React from "react";
 import Folders from "./components/Folders";
 import { Col, Stack, Button, ListGroup } from "react-bootstrap";
-import TrackMeta from "./types/TrackMeta";
+import trackMeta from "./types/TrackMeta";
 
 declare global {
   interface Window {
@@ -15,8 +15,8 @@ declare global {
 }
 
 interface IProps {
-  filesData: TrackMeta;
-  setFilesData: React.Dispatch<React.SetStateAction<TrackMeta>>;
+  filesData?: trackMeta[];
+  setFilesData: React.Dispatch<React.SetStateAction<trackMeta[]>>;
 }
 
 const Header = () => {
@@ -43,13 +43,6 @@ const ScanDirectoryAction = ({
     // setFileData(files as any) only when I'm taking to much time
     setFilesData(files);
   };
-
-  // React.useEffect(() => {
-  //   const button = document.querySelector(".scan_button");
-  //   button?.addEventListener("click", function () {
-  //     console.log("Hello There");
-  //   });
-  // }, []);
 
   return (
     <Stack className="scan_directory" direction="horizontal">
@@ -89,7 +82,7 @@ const Sidebar = ({ filesData, setFilesData }: IProps) => {
       <SidebarAction />
       <div className="folders-wrap pt-4">
         <h3>Active Folders</h3>
-        <Folders filesData={filesData} />
+        {/* <Folders filesData={filesData} /> */}
       </div>
     </Col>
   );

@@ -5,11 +5,11 @@ import Sidebar from "./Sidebar";
 import Divider from "./components/Divider";
 import Directory from "./Directory";
 import RightPane from "./RightPane";
-import { TrackMeta } from "./types/TrackMeta";
+import trackMeta from "./types/TrackMeta";
 
 interface AppState {
-  filesData?: TrackMeta | undefined;
-  setFilesData: React.Dispatch<React.SetStateAction<TrackMeta>>;
+  filesData: trackMeta[];
+  setFilesData: React.Dispatch<React.SetStateAction<trackMeta[]>>;
 }
 
 export const SideBarContext = React.createContext<{
@@ -18,7 +18,7 @@ export const SideBarContext = React.createContext<{
 }>(null as any);
 
 const App = () => {
-  const [filesData, setFilesData] = React.useState<TrackMeta>([]);
+  const [filesData, setFilesData] = React.useState<AppState["filesData"]>([]);
   const [trackId, setTrackId] = React.useState<string | null>(null);
   //console.log(window.fileApp.addArtist('Bob James'))
   return (

@@ -8,6 +8,7 @@ const electron_1 = require("electron");
 const node_id3_1 = __importDefault(require("node-id3"));
 const path_1 = __importDefault(require("path"));
 const electron_window_state_1 = __importDefault(require("electron-window-state"));
+const sharp_1 = __importDefault(require("sharp"));
 const uniqid_1 = __importDefault(require("uniqid"));
 const glob_1 = require("glob");
 let mainWindow;
@@ -78,6 +79,7 @@ electron_1.ipcMain.handle("upload-files", async (event) => {
     // User selected a filepath. continue -->
     const rootDir = dialogButton.filePaths; // Selected directory path
     const audioFiles = await scanDirectory(rootDir); // returns selected directory files (scanned)
+    let tracks = [];
     for (let audioPath of audioFiles.slice(0, 50)) {
         // set a promise that resolve the promise if tags exist //
         const tags = await new Promise((resolve, reject) => {
@@ -95,69 +97,39 @@ electron_1.ipcMain.handle("upload-files", async (event) => {
             continue; // tags does not exist move on to the next audio file
         let audioObject = {
             trackId: (0, uniqid_1.default)("track_"),
-            artist: { artist: tags.artist, features: [] },
-            fileType: path_1.default.extname(audioPath),
-            year: tags.year,
             location: audioPath,
+            favorite: false,
+            artist: tags.artist,
+            fileType: tags.fileType,
+            year: tags.year,
             genre: tags.genre,
             initialKey: tags.initialKey,
             trackLength: tags.length,
-            favorite: false,
             bpm: tags.bpm,
-            title: { name: tags.title, version: "" },
+            title: tags.title,
             contentGroup: tags.contentGroup,
             publisher: tags.publisher,
             composer: tags.composer,
             remixArtist: tags.remixArtist,
             album: tags.album,
+            trackCover: tags.image,
+            trackComments: tags.comment,
         };
-        console.log(audioObject);
-        // let audioObject = {
-        //   trackLength: tags.length,
-        //   trackId: uniqid("track_"),
-        //   location: audioPath,
-        //   title: { name: tags.title, version: "" },
-        //   artist: { artist: tags.artist, features: [] },
-        //   genre: tags.genre,
-        //   contentGroup: tags.contentGroup,
-        //   publisher: tags.publisher,
-        //   userDefinedText: tags.userDefinedText,
-        //   bpm: tags.bpm,
-        //   trackComments: tags.comment,
-        //   composer: tags.composer,
-        //   trackCover: tags.image,
-        //   initialKey: tags.initialKey,
-        //   remixArtist: tags.remixArtist,
-        //   favorite: false,
-        //   fileType: tags.fileType,
-        //   SampleInfo: [{ sample_artist: "", sample_title: "" }],
-        // };
-        // console.log(audioObject);
-        // const { trackCover, trackComments } = audioObject;
-        // if (
-        //   typeof trackCover === "undefined" ||
-        //   typeof trackCover === "string" ||
-        //   typeof trackComments === "undefined" ||
-        //   typeof trackComments === "string"
-        // )
-        //   continue;
-        // const { text } = trackComments;
-        // const { imageBuffer } = trackCover;
-        // console.log(imageBuffer);
-        // console.log(text);
-        // let dataImageLarge = sharp(Buffer.from(imageBuffer)).resize(100);
-        // // let dataImageMedium = sharp(Buffer.from(imageBuffer)).resize(50)
-        // // let dataImageSmall = sharp(Buffer.from(imageBuffer)).resize(35)
-        // // let dataMime = mime.split('/')[1].toLowerCase()
-        // // await dataImage.toFile(`..covers/record-${id}.${dataMime}`)
-        // const data = JSON.stringify(audioObject);
-        // const coverBuffer = await dataImageLarge.jpeg({ quality: 100 }).toBuffer();
+        const { trackCover, trackComments } = audioObject;
+        if (typeof trackCover === "undefined" || typeof trackCover === "string")
+            continue;
+        const { imageBuffer } = trackCover;
+        let dataImageLarge = (0, sharp_1.default)(Buffer.from(imageBuffer)).resize(100);
+        // let dataImageMedium = sharp(Buffer.from(imageBuffer)).resize(50)
+        // let dataImageSmall = sharp(Buffer.from(imageBuffer)).resize(35)
+        // let dataMime = mime.split('/')[1].toLowerCase()
+        // await dataImage.toFile(`..covers/record-${id}.${dataMime}`)
+        //const data = JSON.stringify(audioObject);
+        const coverBuffer = await dataImageLarge.jpeg({ quality: 100 }).toBuffer();
         // const updatedFile = _.omit(audioObject, ["image", "comment"]);
-        // songs.push({
-        //   cover: `data:image/jpeg;base64,` + coverBuffer.toString('base64'),
-        //   ...updatedFile,
-        // })
+        //const cover = `data:image/jpeg;base64,` + coverBuffer.toString("base64");
+        tracks.push({ ...audioObject });
     }
-    //return songs;
+    return tracks;
 });
 //# sourceMappingURL=main.js.map
