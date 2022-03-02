@@ -5,7 +5,7 @@ import Sidebar from "./Sidebar";
 import Divider from "./components/Divider";
 import Directory from "./Directory";
 import RightPane from "./RightPane";
-import trackMeta from "./types/TrackMeta";
+import { trackMeta } from "./types/TrackMeta";
 
 interface AppState {
   filesData: trackMeta[];

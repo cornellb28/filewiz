@@ -1,6 +1,6 @@
 // Interface always has to be an object
 // Interface can't become an array
-type trackMeta = {
+export type trackMeta = {
   trackId: string;
   location?: string;
   title?: string;
@@ -37,5 +37,3 @@ type ImageMeta =
       description: string;
       imageBuffer: Buffer;
     };
-
-export default trackMeta;

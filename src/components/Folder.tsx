@@ -1,6 +1,6 @@
 import * as React from "react";
 import { ListGroup } from "react-bootstrap";
-import TrackMeta from "../types/TrackMeta";
+import { trackMeta } from "../types/TrackMeta";
 
 const Folders = () => {
   return (
