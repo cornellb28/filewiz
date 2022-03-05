@@ -1,22 +1,23 @@
 import * as React from "react";
 import Folders from "./components/Folders";
 import { Col, Stack, Button, ListGroup } from "react-bootstrap";
-import { trackMeta } from "./types/TrackMeta";
+import trackMeta from "./types";
+import { AppState as Props } from "./App";
+
+interface IProps {
+  filesData: Props["filesData"];
+  setFilesData: Props["setFilesData"];
+}
 
 declare global {
   interface Window {
     fileApp: {
       // type generics -- returning a promise that will be a
-      getDirectoryRoot: () => Promise<string[]>;
-      getNames: () => string[];
+      getDirectoryRoot: () => Promise<trackMeta[]>;
+      getNames: () => string;
       addArtist: (name: string) => void;
     };
   }
-}
-
-interface IProps {
-  filesData?: trackMeta[];
-  setFilesData: React.Dispatch<React.SetStateAction<trackMeta[]>>;
 }
 
 const Header = () => {
@@ -30,7 +31,8 @@ const Header = () => {
     </Stack>
   );
 };
-
+// This component is my button to grab the selected directory and we begin to scan
+// We only need the setter function to grab the data passed back to us
 const ScanDirectoryAction = ({
   setFilesData,
 }: {
@@ -38,8 +40,8 @@ const ScanDirectoryAction = ({
   setFilesData: IProps["setFilesData"];
 }) => {
   const scanDir = async () => {
-    const files = await window.fileApp.getDirectoryRoot();
     // @ts-ignore
+    const files = await window.fileApp.getDirectoryRoot();
     // setFileData(files as any) only when I'm taking to much time
     setFilesData(files);
   };
@@ -74,7 +76,7 @@ const SidebarAction = () => {
 };
 
 const Sidebar = ({ filesData, setFilesData }: IProps) => {
-  //console.log(window.fileApp.addArtist('Bob James'))
+  //console.log(window.fileApp.getNames());
   return (
     <Col className="sidebar" md={2}>
       <Header />
@@ -82,7 +84,7 @@ const Sidebar = ({ filesData, setFilesData }: IProps) => {
       <SidebarAction />
       <div className="folders-wrap pt-4">
         <h3>Active Folders</h3>
-        {/* <Folders filesData={filesData} /> */}
+        <Folders filesData={filesData} setFilesData={setFilesData} />
       </div>
     </Col>
   );

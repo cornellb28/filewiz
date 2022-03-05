@@ -1,13 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import "../styles/app.scss";
 import { Container, Row } from "react-bootstrap";
 import Sidebar from "./Sidebar";
 import Divider from "./components/Divider";
 import Directory from "./Directory";
 import RightPane from "./RightPane";
-import { trackMeta } from "./types/TrackMeta";
+import trackMeta from "./types";
 
-interface AppState {
+export interface AppState {
   filesData: trackMeta[];
   setFilesData: React.Dispatch<React.SetStateAction<trackMeta[]>>;
 }
@@ -20,7 +20,6 @@ export const SideBarContext = React.createContext<{
 const App = () => {
   const [filesData, setFilesData] = React.useState<AppState["filesData"]>([]);
   const [trackId, setTrackId] = React.useState<string | null>(null);
-  //console.log(window.fileApp.addArtist('Bob James'))
   return (
     <main>
       <SideBarContext.Provider value={{ trackId, setTrackId }}>
@@ -28,7 +27,7 @@ const App = () => {
           <Row>
             <Sidebar filesData={filesData} setFilesData={setFilesData} />
             <Divider />
-            <Directory />
+            <Directory filesData={filesData} setFilesData={setFilesData} />
             <Divider />
             <RightPane />
           </Row>
@@ -39,3 +38,6 @@ const App = () => {
 };
 
 export default App;
+
+// Resources
+// https://flaviocopes.com/typescript-object-destructuring/

@@ -3,8 +3,14 @@ import FileForm from "./components/FileForm";
 import Files from "./Files";
 import { Col, Form } from "react-bootstrap";
 import { SideBarContext } from "./App";
+import { AppState as Props } from "./App";
 
-const DirectoryHeader: React.FC = () => {
+interface IProps {
+  filesData: Props["filesData"];
+  setFilesData: Props["setFilesData"];
+}
+
+const DirectoryHeader = () => {
   return (
     <div className="directory-header">
       <Form.Control id="disabledTextInput" placeholder="Search Directory..." />
@@ -12,7 +18,7 @@ const DirectoryHeader: React.FC = () => {
   );
 };
 
-const DirectoryFilter: React.FC = () => {
+const DirectoryFilter = () => {
   return (
     <div className="filter-wrap d-flex">
       <section className="select-all-check d-flex">
@@ -42,7 +48,8 @@ const DirectoryFilter: React.FC = () => {
   );
 };
 
-const Directory: React.FC = () => {
+const Directory = ({ filesData, setFilesData }: IProps) => {
+  // console.log(filesData);
   return (
     <Col md={3} className="directory-wrapper">
       <DirectoryHeader />

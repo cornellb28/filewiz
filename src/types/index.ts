@@ -1,6 +1,6 @@
 // Interface always has to be an object
 // Interface can't become an array
-export type trackMeta = {
+interface trackMeta {
   trackId: string;
   location?: string;
   title?: string;
@@ -11,29 +11,26 @@ export type trackMeta = {
   initialKey?: string;
   bpm?: string;
   publisher?: string;
-  trackComments?:
-    | string
-    | {
-        language: string;
-        text: string;
-      };
-  trackCover?: ImageMeta;
+  mediaType?: string;
+  size?: string;
+  comment?: {
+    language: string;
+    text: string;
+  };
+  image?: ImageMeta;
   composer?: string;
   remixArtist?: string;
   album?: string;
-  trackLength?: string;
+  length?: string;
   favorite?: boolean;
   fileType?: string;
-};
+}
 
 type ImageMeta =
   | string
   | {
       mime: string;
-      type: {
-        id: number;
-        name: string;
-      };
-      description: string;
       imageBuffer: Buffer;
     };
+
+export default trackMeta;

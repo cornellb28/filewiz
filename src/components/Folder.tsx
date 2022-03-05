@@ -1,8 +1,8 @@
 import * as React from "react";
 import { ListGroup } from "react-bootstrap";
-import { trackMeta } from "../types/TrackMeta";
+import trackMeta from "../types";
 
-const Folders = () => {
+const Folder = () => {
   return (
     <ListGroup.Item>
       <i className="bx bxs-folder"></i>
@@ -12,4 +12,4 @@ const Folders = () => {
   );
 };
 
-export default Folders;
+export default Folder;

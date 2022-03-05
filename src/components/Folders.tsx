@@ -1,17 +1,35 @@
 import * as React from "react";
+import { useState } from "react";
 import { ListGroup } from "react-bootstrap";
 import Folder from "../components/Folder";
-import {trackMeta} from "../types/TrackMeta";
+import { AppState as Props } from "../App";
+import path from "path";
+import trackMeta from "../types";
 
-interface IState {
-  filesData: trackMeta[];
+interface IProps {
+  filesData: Props["filesData"];
+  setFilesData: Props["setFilesData"];
 }
 
-const Folders = ({ filesData }: { filesData: IState }) => {
-  console.log(filesData);
-  return <ListGroup variant="flush">
-    
-  </ListGroup>;
+type LocationType = {
+  location?: string;
+};
+
+const Folders = ({ filesData, setFilesData }: IProps) => {
+  const [folderName, setFolderName] = useState<string>("");
+  const [fileLength, setFileLength] = useState<number | null>(null);
+
+  const folderPathName = filesData.map((name) => {
+    // https://flaviocopes.com/typescript-object-destructuring/
+    const location: LocationType["location"] = name.location;
+    console.log(location);
+  });
+
+  return (
+    <ListGroup variant="flush">
+      <Folder />
+    </ListGroup>
+  );
 };
 
 export default Folders;

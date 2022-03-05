@@ -1,7 +1,7 @@
 // Modules to control application life and create native browser window
 import { BrowserWindow, app, ipcMain, dialog } from "electron";
 import NodeID3 from "node-id3";
-import trackMeta from "../src/types/TrackMeta";
+import trackMeta from "../src/types";
 import path from "path";
 import windowStateKeeper from "electron-window-state";
 import sharp from "sharp";
@@ -55,96 +55,14 @@ app.on("window-all-closed", () => {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
 
-// scan the directory for all files and folders
-
-ipcMain.handle("upload-files", async (event) => {
+// scan the directory and return the folder path
+ipcMain.handle("upload-files", async () => {
   // function to open dialog on click
   const dialogButton = await dialog.showOpenDialog({
     properties: ["openDirectory", "createDirectory", "openFile"],
   });
 
-  // Scan the root directory user selected
-  async function scanDirectory(filepath: string[]) {
-    return new Promise<string[]>((resolve, reject) => {
-      glob(
-        "/**/*.+(mp3|m4a)",
-        { root: filepath[0] },
-        (err, files: string[]) => {
-          try {
-            resolve(files);
-          } catch (error) {
-            reject(error);
-          }
-        }
-      );
-    });
-  }
-
   // user selected cancel button to show
   if (dialogButton.canceled) return;
-
-  // User selected a filepath. continue -->
-  const rootDir = dialogButton.filePaths; // Selected directory path
-  const audioFiles = await scanDirectory(rootDir); // returns selected directory files (scanned)
-
-  let tracks: trackMeta[] = [];
-  for (let audioPath of audioFiles.slice(0, 50)) {
-    // set a promise that resolve the promise if tags exist //
-
-    const tags = await new Promise<NodeID3.Tags | null>((resolve, reject) => {
-      NodeID3.read(audioPath, { noRaw: true }, (err, tags) => {
-        // early exit
-        if (err) {
-          console.log("nodeid3 issue", err);
-          reject(err);
-        }
-        resolve(tags);
-      });
-    });
-
-    // early exit
-    if (tags === null) continue; // tags does not exist move on to the next audio file
-
-    let audioObject: trackMeta = {
-      trackId: uniqid("track_"),
-      location: audioPath,
-      favorite: false,
-      artist: tags.artist,
-      fileType: tags.fileType,
-      year: tags.year,
-      genre: tags.genre,
-      initialKey: tags.initialKey,
-      trackLength: tags.length,
-      bpm: tags.bpm,
-      title: tags.title,
-      contentGroup: tags.contentGroup,
-      publisher: tags.publisher,
-      composer: tags.composer,
-      remixArtist: tags.remixArtist,
-      album: tags.album,
-      trackCover: tags.image,
-      trackComments: tags.comment,
-    };
-
-    const { trackCover, trackComments } = audioObject;
-
-    if (typeof trackCover === "undefined" || typeof trackCover === "string")
-      continue;
-
-    const { imageBuffer } = trackCover;
-
-    let dataImageLarge = sharp(Buffer.from(imageBuffer)).resize(100);
-    // let dataImageMedium = sharp(Buffer.from(imageBuffer)).resize(50)
-    // let dataImageSmall = sharp(Buffer.from(imageBuffer)).resize(35)
-    // let dataMime = mime.split('/')[1].toLowerCase()
-    // await dataImage.toFile(`..covers/record-${id}.${dataMime}`)
-
-    //const data = JSON.stringify(audioObject);
-
-    const coverBuffer = await dataImageLarge.jpeg({ quality: 100 }).toBuffer();
-    // const updatedFile = _.omit(audioObject, ["image", "comment"]);
-    //const cover = `data:image/jpeg;base64,` + coverBuffer.toString("base64");
-    tracks.push({ ...audioObject });
-  }
-  return tracks;
+  return dialogButton;
 });
