@@ -5185,9 +5185,11 @@ var Folders = function Folders(_ref) {
       setFileLength = _useState4[1];
 
   var folderPathName = filesData.map(function (name) {
-    // https://flaviocopes.com/typescript-object-destructuring/
-    var location = name.location;
-    console.log(location);
+    // Had to remove the first empty index so no bugs on indexing
+    // @ts-ignore
+    var location = name.location.split("/").filter(function (e) {
+      return e;
+    });
   });
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_4__["default"], {
     variant: "flush",
@@ -5195,7 +5197,10 @@ var Folders = function Folders(_ref) {
   });
 };
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Folders);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Folders); // Resources
+// https://github.com/leighhalliday/reduce-example/blob/master/index.js
+// https://flaviocopes.com/typescript-object-destructuring/
+// https://stackoverflow.com/questions/281264/remove-empty-elements-from-an-array-in-javascript
 
 const $ReactRefreshModuleId$ = __webpack_require__.$Refresh$.moduleId;
 const $ReactRefreshCurrentExports$ = __react_refresh_utils__.getModuleExports(
