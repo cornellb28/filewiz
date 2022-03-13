@@ -1,7 +1,9 @@
 import * as React from "react";
+import { useReducer } from "react";
 import Folders from "./components/Folders";
 import { Col, Stack, Button, ListGroup } from "react-bootstrap";
 import trackMeta from "./types";
+import filesReducer, { intialState } from "./reducers/scanFilesReducer";
 import { AppState as Props } from "./App";
 
 interface IProps {
@@ -39,9 +41,11 @@ const ScanDirectoryAction = ({
   // This way I just pick the prop I need from my interface
   setFilesData: IProps["setFilesData"];
 }) => {
+
   const scanDir = async () => {
     // @ts-ignore
     const files = await window.fileApp.getDirectoryRoot();
+
     // setFileData(files as any) only when I'm taking to much time
     setFilesData(files);
   };

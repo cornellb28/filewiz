@@ -18,13 +18,13 @@ const Folders = ({ filesData, setFilesData }: IProps) => {
   const [folderName, setFolderName] = useState<string>("");
   const [fileLength, setFileLength] = useState<number | null>(null);
 
-  const folderPathName = filesData.map((name) => {
-    // Had to remove the first empty index so no bugs on indexing
-    // @ts-ignore
-    const location: LocationType["location"] = name.location
-      .split("/")
-      .filter((e) => e);
-  });
+  // const folderPathName = filesData.map((name) => {
+  //   // Had to remove the first empty index so no bugs on indexing
+  //   // @ts-ignore
+  //   const location: LocationType["location"] = name.location
+  //     .split("/")
+  //     .filter((e) => e);
+  // });
 
   return (
     <ListGroup variant="flush">

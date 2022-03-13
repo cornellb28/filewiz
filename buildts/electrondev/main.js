@@ -59,6 +59,6 @@ electron_1.ipcMain.handle("upload-files", async () => {
     // user selected cancel button to show
     if (dialogButton.canceled)
         return;
-    return dialogButton;
+    return dialogButton.filePaths[0];
 });
 //# sourceMappingURL=main.js.map

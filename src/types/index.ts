@@ -32,5 +32,9 @@ type ImageMeta =
       mime: string;
       imageBuffer: Buffer;
     };
+export type FoldeViewModel = {
+  fo: string[];
+  fi: string[];
+};
 
 export default trackMeta;
