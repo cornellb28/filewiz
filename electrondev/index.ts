@@ -4,12 +4,17 @@ import NodeID3 from "node-id3";
 import uniqid from "uniqid";
 import trackMeta, { FoldeViewModel } from "../src/types";
 import { sep } from "path";
-import { isEmpty } from "lodash";
+import { isArray, isEmpty } from "lodash";
+
+interface NewTags {
+  file: string;
+  tags: NodeID3.Tags | null;
+}
 
 // This helps to scan the directory and seperate the folders and files
 export const scanDirectoryV1 = async (dir: string) => {
   // breakdown the folders structure
-  let { fo, fi }: FoldeViewModel = { fo: [], fi: [] };
+  let { folder, files }: FoldeViewModel = { folder: [], files: [] };
 
   // read the directory to get pathnames for folder and files
   const namedFolder = await readdir(dir);
@@ -22,71 +27,68 @@ export const scanDirectoryV1 = async (dir: string) => {
     // if the path is a file not a directory
     try {
       if (!lstatSync(pathName).isDirectory()) {
-        fi.push(pathName);
+        files.push(pathName);
       } else {
         // lets look for only the folders
-        fo.push(pathName);
+        folder.push(pathName);
       }
     } catch (error) {
       console.log(error);
     }
   });
-  return { fo, fi };
+  return { folder, files };
 };
-// This function will scan the filePath
+// This function will scan the filePath and return the metadata from Nodeid3
 export async function getMetaData(res: string) {
   let audioTracks: trackMeta[] = [];
   // Empty array to
   const folderStructure = await scanDirectoryV1(res); // returns { fo: string[]; fi: string[]; }
+
   // destructure to access each properties[]
-  const { fo, fi } = folderStructure;
+  const { folder, files } = folderStructure;
 
-  const getFilesMeta = async (files: string[]) => {
-    const options = { noRaw: true };
-    const pattern = "DS_Store"; // lets always remove those files
-    const disFilter = files.filter((str) => str.indexOf(pattern) === -1);
-    for (let file of disFilter) {
-      const tags = await new Promise<NodeID3.Tags | null>((resolve, reject) => {
-        NodeID3.read(file, options, (err, tags) => {
-          let isTagsEmpty = isEmpty(tags);
-          if (isTagsEmpty) {
-            let newTrack: NodeID3.Tags = {
-              trackId: uniqid("track_"),
-              location: file,
-              favorite: false,
-              artist: "",
-              fileType: tags?.fileType,
-              year: "",
-              genre: "",
-              initialKey: "",
-              length: "",
-              bpm: "",
-              title: "",
-              contentGroup: "",
-              publisher: "",
-              composer: "",
-              remixArtist: "",
-              album: "",
-              image: "",
-              comment: { language: "", text: "" },
-            };
-            const createNewTags: Buffer = NodeID3.create(newTrack);
-            console.log(createNewTags.toString());
-            //resolve(createNewTags);
-          } else {
+  // Lets just grab all the files that was scanned
+  async function getFilesMeta(files: string[]) {
+    let mediaList: (NodeID3.Tags | null)[] = [];
+    const options = { noRaw: true }; // no raw meta
+    const pattern = "DS_Store"; // lets always remove those files that contains "DS_Store"
+    const filesFilter = files.filter((str) => str.indexOf(pattern) === -1);
+
+    filesFilter.forEach(async (file) => {
+      const mediaTags = await new Promise<NodeID3.Tags | null>(
+        (resolve, reject) => {
+          NodeID3.read(file, options, async (err, tags) => {
+            let isTagsEmpty = isEmpty(tags);
+            if (isTagsEmpty) {
+              let newtags: trackMeta = {
+                trackId: uniqid("track_"),
+                artist: "",
+                title: "",
+                location: file,
+              };
+              NodeID3.write(newtags, file);
+            }
             resolve(tags);
-          }
-        });
-      });
-      // early exit
-      if (tags === null) continue; // tags does not exist move on to the next audio file
-    }
-  };
 
-  const metaTags = await getFilesMeta(fi);
-  //console.log(metaTags);
+            // let obj: Array<NewTags> = [
+            //   {
+            //     file: file,
+            //     tags: tags,
+            //   },
+            // ];
+
+            // let isTagsEmpty = isEmpty(tags);
+            // let updatedFiles: Array<ID3["tags"]> = [];
+          });
+        }
+      );
+      console.log(mediaTags);
+      //mediaList.push(mediaTags);
+    });
+  }
+
+  getFilesMeta(files);
 }
-
 // const selectedFilePath = result.filePaths;
 //       const scandDir = await scanDirectory(selectedFilePath);
 //       // Lets create the var that will hold our new data
@@ -155,3 +157,30 @@ export async function getMetaData(res: string) {
 //       }
 //       return audioTracks;
 //     }),
+
+// let newTrack: trackMeta[] = {
+//   trackId: uniqid("track_"),
+//   location: file,
+//   favorite: false,
+//   artist: tags?.artist ? tags.artist : "",
+//   fileType: tags?.fileType ? tags.fileType : "",
+//   year: tags?.year ? tags.year : "",
+//   genre: tags?.genre ? tags.genre : "",
+//   initialKey: tags?.initialKey ? tags.initialKey : "",
+//   length: tags?.length ? tags.length : "",
+//   bpm: tags?.bpm ? tags.bpm : "",
+//   title: tags?.title ? tags.title : "",
+//   contentGroup: tags?.contentGroup ? tags.contentGroup : "",
+//   publisher: tags?.publisher ? tags.publisher : "",
+//   composer: tags?.composer ? tags.composer : "",
+//   remixArtist: tags?.remixArtist ? tags.remixArtist : "",
+//   album: tags?.album ? tags.album : "",
+//   image: tags?.image ? tags.image : "",
+//   comment: tags?.comment ? tags.comment : "",
+// };
+
+
+
+
+// Resoureces
+// https://stackoverflow.com/questions/25469244/how-can-i-define-an-interface-for-an-array-of-objects

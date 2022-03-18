@@ -33,8 +33,8 @@ type ImageMeta =
       imageBuffer: Buffer;
     };
 export type FoldeViewModel = {
-  fo: string[];
-  fi: string[];
+  folder: string[];
+  files: string[];
 };
 
 export default trackMeta;
