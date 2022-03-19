@@ -32,6 +32,7 @@ type ImageMeta =
       mime: string;
       imageBuffer: Buffer;
     };
+
 export type FoldeViewModel = {
   folder: string[];
   files: string[];

@@ -10,7 +10,8 @@ electron_1.contextBridge.exposeInMainWorld("fileApp", {
     getDirectoryRoot: () => electron_1.ipcRenderer
         .invoke("upload-files")
         .then(async (result) => {
-        const retFiles = await (0, index_1.getMetaData)(result);
+        const test = await (0, index_1.getMetaData)(result);
+        console.log("test", test);
     })
         .catch((error) => {
         console.log("error message", error);

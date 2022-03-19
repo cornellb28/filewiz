@@ -6,6 +6,8 @@
 // let hobbies: string[];
 // let role: [number, string];
 
+import { glob } from "glob";
+
 // takes any type
 let personName: unknown
 

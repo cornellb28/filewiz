@@ -16,7 +16,8 @@ contextBridge.exposeInMainWorld("fileApp", {
     ipcRenderer
       .invoke("upload-files")
       .then(async (result: string) => {
-        const retFiles = await getMetaData(result);
+        const test = await getMetaData(result);
+        console.log("test", test);
       })
       .catch((error) => {
         console.log("error message", error);
