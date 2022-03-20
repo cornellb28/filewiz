@@ -1,41 +1,28 @@
-// Interface always has to be an object
+import NodeID3 from "node-id3";
+
 // Interface can't become an array
 interface trackMeta {
   trackId: string;
-  location?: string;
-  title?: string;
-  artist?: string;
-  genre?: string;
-  contentGroup?: string;
-  year?: string;
-  initialKey?: string;
-  bpm?: string;
-  publisher?: string;
-  mediaType?: string;
-  size?: string;
-  comment?: {
-    language: string;
-    text: string;
-  };
-  image?: ImageMeta;
-  composer?: string;
-  remixArtist?: string;
-  album?: string;
-  length?: string;
-  favorite?: boolean;
-  fileType?: string;
+  type: string;
+  name: string;
+  location: string;
+  children: Meta[];
 }
 
-type ImageMeta =
-  | string
-  | {
-      mime: string;
-      imageBuffer: Buffer;
-    };
-
-export type FoldeViewModel = {
-  folder: string[];
-  files: string[];
+type Meta = {
+  title: string;
+  artist: string;
+  bpm: string;
+  contentGroup: string;
+  genre: string;
+  remixArtist: string;
+  composer: string;
+  initialKey: string;
+  publisher: string;
+  size: string;
+  year: string;
+  comment: { text: string };
+  image: { mime: string; imageBuffer: Buffer };
 };
 
 export default trackMeta;

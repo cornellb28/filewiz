@@ -1,8 +1,5 @@
 import { contextBridge, ipcRenderer } from "electron";
 import * as fse from "fs-extra";
-import sharp from "sharp";
-import trackMeta from "../src/types";
-import NodeID3 from "node-id3";
 import { getMetaData } from "./index";
 
 //const artistMgr = require("../models/artistMgr");

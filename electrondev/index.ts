@@ -1,13 +1,18 @@
 import { glob } from "glob";
 import NodeID3 from "node-id3";
-import uniqid from "uniqid";
-import trackMeta, { FoldeViewModel } from "../src/types";
+import sharp from "sharp";
+import directoryTree from "directory-tree";
+import trackMeta from "../src/types";
+import { trackConversion } from "../src/types/track";
 import { pick } from "lodash";
 
 // Lets get the meta-tags with Nodeid-3
 async function ID3Scan(path: string) {
   return await new Promise<NodeID3.Tags | null>((resolve, reject) => {
-    NodeID3.read(path, { noRaw: true }, (err, tags) => {
+    const options = {
+      noRaw: true,
+    };
+    NodeID3.read(path, options, (err, tags) => {
       try {
         resolve(tags);
       } catch (error) {
@@ -33,21 +38,50 @@ const scanSelectedFiles = async (dir: string) => {
     });
   });
 };
-
+////-----------------------------------------------------///
 export async function getMetaData(res: string) {
-  let filesTags = [];
   await Promise.all([scanSelectedDir(res), scanSelectedFiles(res)]).then(
     async (values) => {
+      const defaultTags = [
+        "title",
+        "artist",
+        "bpm",
+        "genre",
+        "label",
+        "image",
+        "initialKey",
+        "year",
+        "length",
+        "contentGroup",
+        "publisher",
+        "comment",
+        "remixArtist",
+        "composer",
+      ];
       const [folders, files] = values;
-      const defaultTags = ["title", "artist", "bpm", "genre", "label"];
-      for (let file of files) {
+
+      for (let file of files.slice(0, 10)) {
         const convertedTag = await ID3Scan(file);
-        const pullData = pick(convertedTag, defaultTags);
-        console.log(pullData);
+        const pulledMetaData = pick(convertedTag, defaultTags);
+        const { image, comment } = pulledMetaData;
+
+        if (typeof image === "undefined" || typeof image === "string") continue;
+        if (typeof comment === "undefined") continue;
+
+        const { imageBuffer, mime } = image;
+        const { text } = comment;
+        let dataImageLarge = sharp(Buffer.from(imageBuffer)).resize(100);
+        let dataImageMedium = sharp(Buffer.from(imageBuffer)).resize(50);
+        let dataImageSmall = sharp(Buffer.from(imageBuffer)).resize(35);
+        let dataMime = mime.split("/")[1].toLowerCase();
+        //await dataImage.toFile(`..covers/record-${id}.${dataMime}`);
+        let cole = trackConversion(pulledMetaData, file, "Folder", "90s");
+        console.log(cole);
       }
     }
   );
 }
+////-----------------------------------------------------///
 
 // const selectedFilePath = result.filePaths;
 //       const scandDir = await scanDir(selectedFilePath);
