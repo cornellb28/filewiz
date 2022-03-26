@@ -4,8 +4,12 @@ import NodeID3 from "node-id3";
 interface trackMeta {
   trackId: string;
   type: string;
-  name: string;
-  location: string;
+  size: number;
+  extension: string;
+  filename: string;
+  filePath: string;
+  mainFolder: string;
+  subFolder: string;
   children: Meta[];
 }
 
@@ -19,10 +23,13 @@ type Meta = {
   composer: string;
   initialKey: string;
   publisher: string;
-  size: string;
   year: string;
-  comment: { text: string };
-  image: { mime: string; imageBuffer: Buffer };
+  imageCover: {
+    imageLarge: string;
+    imageMedium: string;
+    imageSmall: string;
+  };
+  comment: string;
 };
 
 export default trackMeta;
