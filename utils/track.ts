@@ -1,43 +1,59 @@
 import uniqid from "uniqid";
 import NodeID3 from "node-id3";
 import trackMeta from "../src/types";
+import { outputJson, readJson } from "fs-extra";
 
-interface ConvertedData {
-  items: Partial<NodeID3.Tags>;
-  filePath: string;
-  type: string;
-  extension: string;
+export interface ConvertedData {
+  tags: Partial<NodeID3.Tags>;
+  folderPath: string;
   filename: string;
   mainFolder: string;
   subFolder: string;
   size: number;
+  fileType: string;
+  filePath: string;
 }
 
 export function trackConversion(data: ConvertedData): trackMeta {
   return {
     trackId: uniqid("track_"),
     size: data.size,
-    filePath: data.filePath,
-    extension: data.extension,
+    folderPath: data.folderPath,
     mainFolder: data.mainFolder,
     subFolder: data.subFolder,
-    fileType: data.type,
+    fileType: data.fileType,
     filename: data.filename,
+    filePath: data.filePath,
     children: [
       {
-        title: data.items.title ? data.items.title : "",
-        artist: data.items.artist ? data.items.artist : "",
-        bpm: data.items.bpm ? data.items.bpm : "",
-        remixArtist: data.items.remixArtist ? data.items.remixArtist : "",
-        composer: data.items.composer ? data.items.composer : "",
-        contentGroup: data.items.contentGroup ? data.items.contentGroup : "",
-        initialKey: data.items.initialKey ? data.items.initialKey : "",
-        publisher: data.items.publisher ? data.items.publisher : "",
-        year: data.items.year ? data.items.year : "",
-        genre: data.items.genre ? data.items.genre : "",
-        imageCover: { imageLarge: "", imageMedium: "", imageSmall: "string" },
-        comment: { text: data.items.comment },
+        title: data.tags.title ? data.tags.title : "",
+        artist: data.tags.artist ? data.tags.artist : "",
+        bpm: data.tags.bpm ? data.tags.bpm : "",
+        remixArtist: data.tags.remixArtist ? data.tags.remixArtist : "",
+        composer: data.tags.composer ? data.tags.composer : "",
+        contentGroup: data.tags.contentGroup ? data.tags.contentGroup : "",
+        initialKey: data.tags.initialKey ? data.tags.initialKey : "",
+        publisher: data.tags.publisher ? data.tags.publisher : "",
+        year: data.tags.year ? data.tags.year : "",
+        genre: data.tags.genre ? data.tags.genre : "",
+        imageCover: null,
+        comment: {
+          text: data.tags.comment?.text ? data.tags.comment?.text : "",
+        },
       },
     ],
   };
 }
+
+export async function saveFiles(filePath: string, content: {}) {
+  try {
+    await outputJson(filePath, content);
+    const data = await readJson(filePath);
+    console.log("JSON written successfully with Promises!");
+    console.log(data);
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+module.exports = { trackConversion, saveFiles };

@@ -3,33 +3,33 @@ import NodeID3 from "node-id3";
 // Interface can't become an array
 interface trackMeta {
   trackId: string;
-  type: string;
+  fileType: string;
   size: number;
-  extension: string;
   filename: string;
-  filePath: string;
+  folderPath: string;
   mainFolder: string;
   subFolder: string;
   children: Meta[];
+  filePath: string;
 }
 
 type Meta = {
-  title: string;
-  artist: string;
-  bpm: string;
-  contentGroup: string;
-  genre: string;
-  remixArtist: string;
-  composer: string;
-  initialKey: string;
-  publisher: string;
-  year: string;
+  title: string | null;
+  artist: string | null;
+  bpm: string | null;
+  contentGroup: string | null;
+  genre: string | null;
+  remixArtist: string | null;
+  composer: string | null;
+  initialKey: string | null;
+  publisher: string | null;
+  year: string | null;
   imageCover: {
-    imageLarge: string;
-    imageMedium: string;
-    imageSmall: string;
-  };
-  comment: string;
+    imageLarge: string | null;
+    imageMedium: string | null;
+    imageSmall: string | null;
+  } | null;
+  comment: { text: string | null };
 };
 
 export default trackMeta;
