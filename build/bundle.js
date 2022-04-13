@@ -1237,7 +1237,7 @@ var ScanDirectoryAction = function ScanDirectoryAction(_ref) {
             case 2:
               files = _context.sent;
               // setFileData(files as any) only when I'm taking to much time
-              setFilesData(files);
+              setFilesData(files); //const sendMessage = await window.fileApp.sendNotification("Hello There");
 
             case 4:
             case "end":

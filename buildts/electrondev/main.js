@@ -61,4 +61,8 @@ electron_1.ipcMain.handle("upload-files", async () => {
         return;
     return dialogButton.filePaths[0];
 });
+//
+electron_1.ipcMain.on("notify", (_, message) => {
+    new electron_1.Notification({ title: "Notifiation", body: message }).show();
+});
 //# sourceMappingURL=main.js.map

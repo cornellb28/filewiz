@@ -8,16 +8,14 @@ import { getMetaData } from "./index";
 // This could be my main source of scanning any path
 
 contextBridge.exposeInMainWorld("fileApp", {
-  // button action to show
-  getDirectoryRoot: () =>
-    ipcRenderer
-      .invoke("upload-files")
-      .then(async (result: string) => {
-        await getMetaData(result);
-      })
-      .catch((error) => {
-        console.log("error message", error);
-      }),
-  //getNames: () => artistMgr.getNames(),
-  //addArtist: (name: string) => artistMgr.addArtist(name),
+  sendNotification: (message: string) => {
+    ipcRenderer.send("notify", message);
+  },
+  getDirectoryRoot: async () => {
+    const rootFolder = await ipcRenderer.invoke("upload-files");
+    const getData = await getMetaData(rootFolder);
+    return getData;
+  },
+  // getNames: () => artistMgr.getNames(),
+  // addArtist: (name: string) => artistMgr.addArtist(name),
 });

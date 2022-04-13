@@ -2,13 +2,16 @@ declare module "*.jpg";
 declare module "*.png";
 declare module "*.svg";
 
-declare module global {
+export declare module global {
+  type API = {
+    // type generics -- returning a promise that will be a
+    getDirectoryRoot: () => Promise<string[]>;
+    getNames: () => string[];
+    addArtist: (name: string) => void;
+    sendNotification: () => void;
+  };
+
   interface Window {
-    fileApp: {
-      // type generics -- returning a promise that will be a
-      getDirectoryRoot: () => Promise<string[]>;
-      getNames: () => string[];
-      addArtist: (name: string) => void;
-    };
+    fileApp: API;
   }
 }

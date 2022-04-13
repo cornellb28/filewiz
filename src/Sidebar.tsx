@@ -11,17 +11,6 @@ interface IProps {
   setFilesData: Props["setFilesData"];
 }
 
-declare global {
-  interface Window {
-    fileApp: {
-      // type generics -- returning a promise that will be a
-      getDirectoryRoot: () => Promise<trackMeta[]>;
-      getNames: () => string;
-      addArtist: (name: string) => void;
-    };
-  }
-}
-
 const Header = () => {
   return (
     <Stack className="logo_content" direction="horizontal">
@@ -41,13 +30,12 @@ const ScanDirectoryAction = ({
   // This way I just pick the prop I need from my interface
   setFilesData: IProps["setFilesData"];
 }) => {
-
   const scanDir = async () => {
     // @ts-ignore
     const files = await window.fileApp.getDirectoryRoot();
-
     // setFileData(files as any) only when I'm taking to much time
     setFilesData(files);
+    //const sendMessage = await window.fileApp.sendNotification("Hello There");
   };
 
   return (

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import "../styles/app.scss";
 import { Container, Row } from "react-bootstrap";
 import Sidebar from "./Sidebar";
@@ -11,17 +11,6 @@ import trackMeta from "./types";
 export interface AppState {
   filesData: trackMeta[];
   setFilesData: React.Dispatch<React.SetStateAction<trackMeta[]>>;
-}
-
-declare global {
-  interface Window {
-    fileApp: {
-      // type generics -- returning a promise that will be a
-      getDirectoryRoot: () => Promise<trackMeta[]>;
-      getNames: () => string;
-      addArtist: (name: string) => void;
-    };
-  }
 }
 
 export const SideBarContext = React.createContext<{
@@ -39,7 +28,7 @@ const App = () => {
         <Container fluid>
           <Row>
             <FoldersList />
-            
+
             <Sidebar filesData={filesData} setFilesData={setFilesData} />
             {/* <Directory filesData={filesData} setFilesData={setFilesData} /> */}
             {/* <RightPane /> */}

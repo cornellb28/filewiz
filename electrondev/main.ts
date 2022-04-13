@@ -1,5 +1,5 @@
 // Modules to control application life and create native browser window
-import { BrowserWindow, app, ipcMain, dialog } from "electron";
+import { BrowserWindow, app, ipcMain, dialog, Notification } from "electron";
 import NodeID3 from "node-id3";
 import trackMeta from "../src/types";
 import path from "path";
@@ -65,4 +65,9 @@ ipcMain.handle("upload-files", async () => {
   // user selected cancel button to show
   if (dialogButton.canceled) return;
   return dialogButton.filePaths[0];
+});
+
+//
+ipcMain.on("notify", (_, message) => {
+  new Notification({ title: "Notifiation", body: message }).show();
 });

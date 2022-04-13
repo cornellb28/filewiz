@@ -3,11 +3,9 @@ import NodeID3 from "node-id3";
 // Interface can't become an array
 interface trackMeta {
   trackId: string;
-  fileType: string;
   size: number;
   filename: string;
   folderPath: string;
-  mainFolder: string;
   subFolder: string;
   children: Meta[];
   filePath: string;
@@ -22,12 +20,12 @@ type Meta = {
   remixArtist: string | null;
   composer: string | null;
   initialKey: string | null;
-  publisher: string | null;
+  label: string | null;
   year: string | null;
   imageCover: {
-    imageLarge: string | null;
-    imageMedium: string | null;
-    imageSmall: string | null;
+    cover100: string | null;
+    cover50: string | null;
+    cover35: string | null;
   } | null;
   comment: { text: string | null };
 };
