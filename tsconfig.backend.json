@@ -10,5 +10,5 @@
     // "forceConsistentCasingInFileNames": true,
     "types": ["node"] // https://bobbyhadz.com/blog/typescript-cannot-find-module-path
   },
-  "include": ["electrondev/**/*", "models/**/*"]
+  "include": ["electrondev/**/*"]
 }

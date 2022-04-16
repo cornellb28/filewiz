@@ -7,10 +7,87 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Artist {
-  userid Int @id @default(autoincrement())
+model User {
+  id             Int          @id @default(autoincrement())
+  first_name     String
+  last_name      String?
+  email          String       @unique
+  stage_name     String?
+  websiteUrl     String?
+  instagramUrl   String?
+  facebookUrl    String?
+  twitchUrl      String?
+  tiktokUrl      String?
+  user_profile   UserProfile?
+  user_playlists Playlist[]
 }
 
+model UserProfile {
+  id             Int  @id @default(autoincrement())
+  user           User @relation(fields: [user_profileId], references: [id])
+  user_profileId Int  @unique
+}
 
+model Artist {
+  id             Int            @id @default(autoincrement())
+  artist_profile ArtistProfile?
+  playlist       Playlist[]
+  tracks         Track[]
+  albums         Album[]
+}
+
+model ArtistProfile {
+  id       Int    @id @default(autoincrement())
+  artist   Artist @relation(fields: [artistId], references: [id])
+  artistId Int    @unique
+}
+
+model Track {
+  id            Int        @id @default(autoincrement())
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  size          Int
+  filePath      String
+  folderPath    String
+  filename      String
+  subFolderPath String
+  playCount     Int        @default(0)
+  artistId      Int
+  artist        Artist     @relation(fields: [artistId], references: [id])
+  playlists     Playlist[]
+  labels        Label[]
+  genres        Genre[]
+}
+
+model Album {
+  id       Int     @id @default(autoincrement())
+  name     String  @unique
+  Artist   Artist? @relation(fields: [artistId], references: [id])
+  artistId Int?
+}
+
+model Label {
+  id      Int    @id @default(autoincrement())
+  name    String @unique
+  Track   Track? @relation(fields: [trackId], references: [id])
+  trackId Int?
+}
+
+model Genre {
+  id      Int    @id @default(autoincrement())
+  genre   String @unique
+  trackId Int
+  track   Track  @relation(fields: [trackId], references: [id])
+}
+
+model Playlist {
+  id        Int     @id @default(autoincrement())
+  artistId  Int
+  artist    Artist? @relation(fields: [artistId], references: [id])
+  trackId   Int
+  tracks    Track?  @relation(fields: [trackId], references: [id])
+  user_plId Int
+  user_pl   User    @relation(fields: [user_plId], references: [id])
+}
 
 // https://stackoverflow.com/questions/23460815/sql-listing-multiple-artists-for-a-song
