@@ -12,7 +12,7 @@
     // "disableReferencedProjectLoad": true,             /* Reduce the number of projects loaded automatically by TypeScript. */
 
     /* Language and Environment */
-    "target": "es5" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
+    "target": "esnext" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
     "lib": [
       "DOM",
       "ESNext"
@@ -87,5 +87,11 @@
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
   },
-  "include": ["src/**/*", "electrondev/**/*", "models/**/*", "utils/track.ts", "prisma/apiClient.ts"]
+  "include": [
+    "src/**/*",
+    "electrondev/**/*",
+    "models/**/*",
+    "utils/track.ts",
+    "prisma/apiClient.ts"
+  ]
 }
